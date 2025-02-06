@@ -175,7 +175,7 @@ func apply_recoil(ver_recoil : float, hor_recoil : float):
 	var random_recoil := Vector2(randf_range(-1, 1), randf_range(0.5, 1)) 
 	var recoil = random_recoil
 	if player.is_crouched :
-		player.add_recoil(recoil.y * ver_recoil * 0.6, -recoil.x * hor_recoil * 0.4)
+		player.add_recoil(recoil.y * ver_recoil * 0.5, -recoil.x * hor_recoil * 0.3)
 	else:
 		player.add_recoil(recoil.y * ver_recoil, -recoil.x * hor_recoil)
 	

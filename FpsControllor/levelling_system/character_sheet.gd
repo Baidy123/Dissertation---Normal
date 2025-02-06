@@ -26,45 +26,46 @@ func _ready() -> void:
 	attribute_available_points = character.attribute_available_points
 	skill_available_points = character.skill_available_points
 	#print(character)
-	if $HBoxContainer/VBoxContainer/Attribute.visible == true:
+	if $HBoxContainer/VBoxContainer/Attributes.visible == true:
 		
-		#for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
-			##button.set_disabled(true)
-			#button.set_visible(false)
-		#for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
-			##button.set_disabled(true)
-			#button.set_visible(false)
+		for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
+		for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
 		%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
 		if attribute_available_points == 0:
-			$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints.set_visible(false)
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints.set_visible(false)
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
 		else:
 			for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
-				#button.set_disabled(false)
+				button.set_disabled(false)
 				button.set_visible(true)
 	
 	elif $HBoxContainer/VBoxContainer/Skills.visible == true:
 		
-		#for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-			##button.set_disabled(true)
-			#button.set_visible(false)
-		#for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
-			##button.set_disabled(true)
-			#button.set_visible(false)
+		for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
+		for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
 		%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 		if skill_available_points == 0:
 			pass
 			#$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints.set_visible(false)
 		else:
 			for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-				#button.set_disabled(false)
+				button.set_disabled(false)
 				button.set_visible(true)
 
 func load_stats():
 	if character:
-		if $HBoxContainer/VBoxContainer/Attribute.visible == true:
-			$HBoxContainer/VBoxContainer/Attribute/AttributeName/Constitution/Panel/Stats/Value.set_text(str(character.constitution))
-			$HBoxContainer/VBoxContainer/Attribute/AttributeName/Strength/Panel/Stats/Value.set_text(str(character.strength))
-			$HBoxContainer/VBoxContainer/Attribute/AttributeName/Perception/Panel/Stats/Value.set_text(str(character.perception))
+		if $HBoxContainer/VBoxContainer/Attributes.visible == true:
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/Constitution/Panel/Stats/Value.set_text(str(character.constitution))
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/Strength/Panel/Stats/Value.set_text(str(character.strength))
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/Perception/Panel/Stats/Value.set_text(str(character.perception))
 		elif $HBoxContainer/VBoxContainer/Skills.visible == true:
 			$HBoxContainer/VBoxContainer/Skills/SkillName/Endurance/Panel/Stats/Value.set_text(str(character.endurance))
 			$HBoxContainer/VBoxContainer/Skills/SkillName/Resilience/Panel/Stats/Value.set_text(str(character.resilience))
@@ -78,20 +79,20 @@ func increase_attribute(stat: String):
 	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") +1)
 	%AttributeName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
 												get(stat.to_lower() + "_add")) + " ")
-	#%AttributeName.get_node(stat + "/Panel/Min").set_disabled(false)
+	%AttributeName.get_node(stat + "/Panel/Min").set_disabled(false)
 	%AttributeName.get_node(stat + "/Panel/Min").set_visible(true)
 	attribute_available_points -= 1
 	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
 	if attribute_available_points == 0:
 		for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
-			#button.set_disabled(true)
+			button.set_disabled(true)
 			button.set_visible(false)
 	print(stat + "Plus")
 	
 func decrease_attribute(stat: String):
 	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") -1)
 	if get(stat.to_lower() + "_add") == 0:
-		#%AttributeName.get_node(stat + "/Panel/Min").set_disabled(true)
+		%AttributeName.get_node(stat + "/Panel/Min").set_disabled(true)
 		%AttributeName.get_node(stat + "/Panel/Min").set_visible(false)
 		%AttributeName.get_node(stat + "/Panel/Stats/Change").set_text("")
 	else :
@@ -100,7 +101,7 @@ func decrease_attribute(stat: String):
 	attribute_available_points += 1
 	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
 	for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
-		#button.set_disabled(false)
+		button.set_disabled(false)
 		button.set_visible(true)
 	print((stat + "Minus"))
 
@@ -108,20 +109,20 @@ func increase_skill(stat: String):
 	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") +1)
 	%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
 												get(stat.to_lower() + "_add")) + " ")
-	#%SkillName.get_node(stat + "/Panel/Min").set_disabled(false)
+	%SkillName.get_node(stat + "/Panel/Min").set_disabled(false)
 	%SkillName.get_node(stat + "/Panel/Min").set_visible(true)
 	skill_available_points -= 1
 	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 	if skill_available_points == 0:
 		for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-			#button.set_disabled(true)
+			button.set_disabled(true)
 			button.set_visible(false)
 	print(stat + "Plus")
 	
 func decrease_skill(stat: String):
 	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") -1)
 	if get(stat.to_lower() + "_add") == 0:
-		#%SkillName.get_node(stat + "/Panel/Min").set_disabled(true)
+		%SkillName.get_node(stat + "/Panel/Min").set_disabled(true)
 		%SkillName.get_node(stat + "/Panel/Min").set_visible(false)
 		%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("")
 	else :
@@ -130,7 +131,7 @@ func decrease_skill(stat: String):
 	skill_available_points += 1
 	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 	for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-		#button.set_disabled(false)
+		button.set_disabled(false)
 		button.set_visible(true)
 	print((stat + "Minus"))
 	
@@ -152,7 +153,7 @@ func _on_attribute_confirm_pressed() -> void:
 		for label in get_tree().get_nodes_in_group("AttributeChangeLabels"):
 			label.set_text(" ")
 		if attribute_available_points == 0:
-			$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
+			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
 
 func _on_skill_confirm_pressed() -> void:
 	if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
@@ -195,16 +196,36 @@ func _exit_tree():
 
 
 func _on_attribute_pressed() -> void:
-	$HBoxContainer/VBoxContainer/Attribute.show()
+	$HBoxContainer/VBoxContainer/Attributes.show()
 	$HBoxContainer/VBoxContainer/Skills.hide()
-	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
-	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
+	$HBoxContainer/VBoxContainer/Perks.hide()
+	load_stats()
+	if attribute_available_points == 0:
+		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints.set_visible(false)
+		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
+		for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
+		for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
+	else:
+		%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
+		%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 	
 	
 
 
 func _on_skills_pressed() -> void:
-	$HBoxContainer/VBoxContainer/Attribute.hide()
+	$HBoxContainer/VBoxContainer/Attributes.hide()
 	$HBoxContainer/VBoxContainer/Skills.show()
+	$HBoxContainer/VBoxContainer/Perks.hide()
+	load_stats()
 	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
 	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
+
+
+func _on_perks_pressed() -> void:
+	$HBoxContainer/VBoxContainer/Attributes.hide()
+	$HBoxContainer/VBoxContainer/Skills.hide()
+	$HBoxContainer/VBoxContainer/Perks.show()
