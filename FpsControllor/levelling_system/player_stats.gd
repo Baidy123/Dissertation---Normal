@@ -52,32 +52,3 @@ func on_level_up(skill_points_gain: int):
 	unassigned_skill_points += skill_points_gain
 	#print("Resource got on_level_up(): unassigned_skill_points =", unassigned_skill_points)
 	
-func assign_skill_points(skill_name: String, amount: int):
-	if amount <= 0:
-		printerr("Invalid skill points amount:", amount)
-		return
-	if unassigned_skill_points < amount:
-		printerr("Not enough skill points to assign.")
-		return
-	
-	match skill_name:
-		"endurance":
-			endurance += amount
-		"resilience":
-			resilience += amount
-		"melee_weapons":
-			melee_weapons += amount
-		"intimidation":
-			intimidation += amount
-		#"weapon_handling":
-			#weapon_handling += amount
-		"handguns":
-			handguns += amount
-		"rifles":
-			rifles += amount
-		_:
-			printerr("Invalid skill name:", skill_name)
-			return
-	
-	unassigned_skill_points -= amount
-	#print("Assigned", amount, "points to", skill_name, ", left:", unassigned_skill_points)

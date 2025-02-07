@@ -14,18 +14,48 @@ var headbob_time = 0.0
 #Character state
 @export var health := 100.0
 @export var max_health := 100.0
-@export var constitution :int = 4
-@export var strength :int = 5
-@export var perception :int = 6
+
 @export var attribute_available_points :int = 6
 
-@export var endurance = 2
-@export var resilience = 2
-@export var melee = 2
-@export var intimidation = 2
-@export var handguns = 2
-@export var longguns = 2
+@export var attributes = {
+	"constitution" : 4,
+	"strength" : 5,
+	"perception" : 6
+}
 @export var skill_available_points :int = 6
+
+@export var skills = {
+	"endurance" = 2,
+	"resilience" = 2,
+	"melee" = 2,
+	"intimidation" = 2,
+	"handguns" = 2,
+	"longguns" = 2
+}
+
+@export var perk_available_points :int = 6
+
+@export var perks = {
+	"1a" : false,
+	"1b" : false,
+	"1c" : false,
+	"2a" : false,
+	"2b" : false,
+	"2c" : false,
+	"3a" : false,
+	"3b" : false,
+	"3c" : false,
+}
+
+#@export var perk_1a : bool = false
+#@export var perk_1b : bool = false
+#@export var perk_1c : bool = false
+#@export var perk_2a : bool = true
+#@export var perk_2b : bool = false
+#@export var perk_2c : bool = false
+#@export var perk_3a : bool = true
+#@export var perk_3b : bool = false
+#@export var perk_3c : bool = false
 
 
 

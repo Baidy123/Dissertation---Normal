@@ -11,6 +11,53 @@ var experience : int = 0
 var experience_total : int = 0
 var experience_required : int = get_required_experience(curr_level + 1)
 
+@export var perk_requirement = {
+	"1a": {
+		"attribute": {"constitution": 3},
+		"skill": {"resilience": 10},
+		"points": 1
+	},
+	"1b": {
+		"attribute": {"constitution": 3},
+		"skill": {"resilience": 20},
+		"points": 1
+	},
+	"1c": {
+		"attribute": {"constitution": 3},
+		"skill": {"resilience": 30},
+		"points": 1
+	},
+	"2a": {
+		"attribute": {"constitution": 3},
+		"skill": {"resilience": 40},
+		"points": 1
+	},
+	"2b": {
+		"attribute": {"constitution": 3},
+		"skill": {"resilience": 50},
+		"points": 1
+	},
+	"2c": {
+		"attribute": {"constitution": 5},
+		"skill": {"resilience": 240},
+		"points": 1
+	},
+	"3a": {
+		"attribute": {"constitution": 7},
+		"skill": {"resilience": 20},
+		"points": 1
+	},
+	"3b": {
+		"attribute": {"constitution": 9},
+		"skill": {"resilience": 20},
+		"points": 1
+	},
+	"3c": {
+		"attribute": {"strength": 10},
+		"skill": {"resilience": 20},
+		"points": 1
+	}
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

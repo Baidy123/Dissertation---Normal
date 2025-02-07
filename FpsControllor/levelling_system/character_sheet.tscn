@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://p5a5jm3h7rha"]
+[gd_scene load_steps=18 format=3 uid="uid://p5a5jm3h7rha"]
 
 [ext_resource type="Script" path="res://FpsControllor/levelling_system/character_sheet.gd" id="1_xfc86"]
 [ext_resource type="Texture2D" uid="uid://yff03im7mmrw" path="res://FpsControllor/levelling_system/BulletTime.webp" id="2_dt4ng"]
 [ext_resource type="Texture2D" uid="uid://c76ktl2vmnh4h" path="res://FpsControllor/levelling_system/BulletTime_disabled.webp" id="3_ndo4i"]
+[ext_resource type="Texture2D" uid="uid://bfudojlcf6nn7" path="res://FpsControllor/levelling_system/GlowFrame_CustomBlue.webp" id="4_fmcnj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lb3ni"]
 content_margin_left = 10.0
@@ -189,6 +190,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Plus" type="TextureButton" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/Constitution/Panel" groups=["AttributePlusButtons"]]
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
 anchors_preset = 6
@@ -320,6 +322,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Plus" type="TextureButton" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/Strength/Panel" groups=["AttributePlusButtons"]]
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
 anchors_preset = 6
@@ -449,6 +452,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Plus" type="TextureButton" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/Perception/Panel" groups=["AttributePlusButtons"]]
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
 anchors_preset = 6
@@ -675,6 +679,7 @@ label_settings = SubResource("LabelSettings_owi7x")
 autowrap_mode = 3
 
 [node name="Skills" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 2
 
@@ -1679,7 +1684,6 @@ label_settings = SubResource("LabelSettings_owi7x")
 autowrap_mode = 3
 
 [node name="Perks" type="Control" parent="HBoxContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -1703,7 +1707,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="3A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3"]
+[node name="3A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1711,13 +1715,23 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3A"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Blocks" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="3B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3"]
+[node name="3B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1727,11 +1741,20 @@ texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3B"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Blocks2" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="3C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3"]
+[node name="3C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1739,6 +1762,15 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3C"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer"]
@@ -1754,7 +1786,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="2A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2"]
+[node name="2A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1762,13 +1794,22 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2A"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Blocks" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="2B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2"]
+[node name="2B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1778,11 +1819,20 @@ texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2B"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Blocks2" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="2C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2"]
+[node name="2C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1790,6 +1840,15 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2C"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer"]
@@ -1805,7 +1864,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="1A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1"]
+[node name="1A" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1813,13 +1872,22 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1A"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Blocks2" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="1B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1"]
+[node name="1B" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1827,13 +1895,22 @@ tooltip_text = "Bullet Time: Slows down time.
 texture_normal = ExtResource("2_dt4ng")
 texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1B"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Blocks3" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="1C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1"]
+[node name="1C" type="TextureButton" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1" groups=["PerksButtons"]]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
@@ -1843,13 +1920,22 @@ texture_disabled = ExtResource("3_ndo4i")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1C"]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_fmcnj")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="PerkAvailablePoints" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer"]
-unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="PerkPoints" type="Label" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/PerkAvailablePoints"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Points: 12
 "
@@ -1976,6 +2062,15 @@ vertical_alignment = 1
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Skills/SkillName/LongGuns/Panel/Min" to="." method="decrease_skill" binds= ["LongGuns"]]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Skills/SkillName/LongGuns/Panel/Plus" to="." method="increase_skill" binds= ["LongGuns"]]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Skills/SkillName/SkillPoints/SkillConfirm" to="." method="_on_skill_confirm_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3A" to="." method="spend_perk_points" binds= ["3a"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3B" to="." method="spend_perk_points" binds= ["3b"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3C" to="." method="spend_perk_points" binds= ["3c"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2A" to="." method="spend_perk_points" binds= ["2a"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2B" to="." method="spend_perk_points" binds= ["2b"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2C" to="." method="spend_perk_points" binds= ["2c"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1A" to="." method="spend_perk_points" binds= ["1a"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1B" to="." method="spend_perk_points" binds= ["1b"]]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1C" to="." method="spend_perk_points" binds= ["1c"]]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Attribute" to="." method="_on_attribute_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Perks" to="." method="_on_perks_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Skills" to="." method="_on_skills_pressed"]
