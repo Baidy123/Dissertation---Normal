@@ -424,13 +424,18 @@ func gain_exp(amt: int):
 	#return_req_exp()
 	
 func on_level_up(skill_points_gain: int):
+	$PlayerHUD.get_node("Reminder").set_text("Level Up!!!")
+	$PlayerHUD.get_node("Reminder").set_visible(true)
 	skill_available_points += skill_points_gain
 	curr_level = $LevellingSystem.curr_level
 	if curr_level % 2 == 0:
 		perk_available_points += 1
+	await get_tree().create_timer(3.0).timeout
+	$PlayerHUD.get_node("Reminder").set_visible(false)
 	
 @onready var animation_tree : AnimationTree = $"WorldModel/desert droid container/AnimationTree"
 @onready var state_machine_playback : AnimationNodeStateMachinePlayback = $"WorldModel/desert droid container/AnimationTree".get("parameters/playback")
+
 func update_animations():
 	if noclip or (not is_on_floor() and not _snapped_to_stairs_last_frame):
 		state_machine_playback.travel("MidJump")

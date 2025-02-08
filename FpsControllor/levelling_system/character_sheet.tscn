@@ -2019,35 +2019,6 @@ label_settings = SubResource("LabelSettings_5mpji")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Perks" type="TextureButton" parent="HBoxContainer/VBoxContainer/Button"]
-custom_minimum_size = Vector2(300, 50)
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-
-[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/Button/Perks"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rgyx8")
-
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Button/Perks/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Perks
-"
-label_settings = SubResource("LabelSettings_5mpji")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Skills" type="TextureButton" parent="HBoxContainer/VBoxContainer/Button"]
 custom_minimum_size = Vector2(300, 50)
 layout_mode = 2
@@ -2072,6 +2043,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Skills
+"
+label_settings = SubResource("LabelSettings_5mpji")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Perks" type="TextureButton" parent="HBoxContainer/VBoxContainer/Button"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/Button/Perks"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rgyx8")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Button/Perks/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Perks
 "
 label_settings = SubResource("LabelSettings_5mpji")
 horizontal_alignment = 1
@@ -2107,5 +2107,5 @@ vertical_alignment = 1
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1B" to="." method="spend_perk_points" binds= ["1b"]]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1C" to="." method="spend_perk_points" binds= ["1c"]]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Attribute" to="." method="_on_attribute_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Perks" to="." method="_on_perks_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Skills" to="." method="_on_skills_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Button/Perks" to="." method="_on_perks_pressed"]

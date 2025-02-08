@@ -239,3 +239,12 @@ text = "30"
 label_settings = SubResource("LabelSettings_fqmlv")
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="Reminder" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 426.0
+offset_top = 73.0
+offset_right = 777.0
+offset_bottom = 242.0
+label_settings = SubResource("LabelSettings_rnyrh")

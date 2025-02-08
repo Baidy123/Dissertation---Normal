@@ -243,6 +243,13 @@ func _on_attribute_confirm_pressed() -> void:
 		character.attributes["constitution"] += constitution_add
 		character.attributes["strength"] += strength_add
 		character.attributes["perception"] += perception_add
+		character.skills["endurance"] += constitution_add * 5
+		character.skills["resilience"] += constitution_add * 5
+		character.skills["melee"] += strength_add * 5
+		character.skills["intimidation"] += strength_add * 5
+		character.skills["handguns"] += perception_add * 5
+		character.skills["longguns"] += perception_add * 5
+		
 		strength_add = 0
 		constitution_add = 0
 		perception_add = 0

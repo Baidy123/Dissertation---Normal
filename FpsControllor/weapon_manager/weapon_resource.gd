@@ -147,7 +147,15 @@ func fire_shot():
 
 	var spread_x := randf_range(get_player_velocity() * bullet_spread * -0.5, get_player_velocity() * bullet_spread *  0.5)
 	var spread_y := randf_range(get_player_velocity() * bullet_spread * -0.5, get_player_velocity() * bullet_spread * 0.5)
-	print(spread_x)
+	if spread_x >= 5:
+		spread_x = 5
+	if spread_x <= -5:
+		spread_x = -5
+	if spread_y >= 5:
+		spread_y = 5
+	if spread_y <= -5:
+		spread_y = -5
+	#print(spread_x)
 	raycast.target_position = Vector3(spread_x,spread_y,-abs(bullet_range))
 	raycast.force_raycast_update()
 	
