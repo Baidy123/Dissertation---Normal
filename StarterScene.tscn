@@ -311,6 +311,7 @@ func _process(delta: float) -> void:
 func take_damage(amount : int):
 	hp -= amount
 	if hp <= 0:
+		%Player.gain_exp(2000)
 		self.queue_free()
 		$\"../AudioStreamPlayer3D\".play()
 
@@ -1009,6 +1010,7 @@ font = SubResource("SystemFont_jiwdd")
 font_size = 96
 
 [node name="Player" parent="." instance=ExtResource("9_jv3qt")]
+unique_name_in_owner = true
 
 [connection signal="interacted" from="Button/InteractableComponent" to="Button/Door" method="toggle_open"]
 [connection signal="interacted" from="Button/InteractableComponent" to="Button/AnimationPlayer" method="play" binds= ["door_open"]]

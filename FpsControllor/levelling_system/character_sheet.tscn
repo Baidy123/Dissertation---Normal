@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://p5a5jm3h7rha"]
+[gd_scene load_steps=19 format=3 uid="uid://p5a5jm3h7rha"]
 
 [ext_resource type="Script" path="res://FpsControllor/levelling_system/character_sheet.gd" id="1_xfc86"]
 [ext_resource type="Texture2D" uid="uid://yff03im7mmrw" path="res://FpsControllor/levelling_system/BulletTime.webp" id="2_dt4ng"]
@@ -15,6 +15,10 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_76qm8"]
+font_size = 26
+font_color = Color(0.439216, 0.803922, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_27bf2"]
 bg_color = Color(0, 0, 0, 0.760784)
@@ -34,10 +38,6 @@ corner_radius_bottom_left = 15
 font_size = 50
 font_color = Color(0.439216, 0.803922, 1, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_76qm8"]
-font_size = 26
-font_color = Color(0.439216, 0.803922, 1, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_ha2qd"]
 font_size = 26
 font_color = Color(0.921569, 0.964706, 0, 1)
@@ -52,6 +52,10 @@ font_color = Color(0.439216, 0.803922, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_eyl0o"]
 font_size = 40
+font_color = Color(0.439216, 0.803922, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7el1g"]
+font_size = 30
 font_color = Color(0.439216, 0.803922, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5x0e"]
@@ -116,7 +120,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Attributes" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 2
 
@@ -127,8 +130,22 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer"]
+layout_mode = 2
+
+[node name="Level" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = SubResource("LabelSettings_76qm8")
+
+[node name="Exp" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+label_settings = SubResource("LabelSettings_76qm8")
 
 [node name="Constitution" type="Control" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName"]
 custom_minimum_size = Vector2(0, 60)
@@ -524,6 +541,7 @@ text = "5
 label_settings = SubResource("LabelSettings_cj8g5")
 
 [node name="AttributePoints" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -566,6 +584,14 @@ text = "Confirm
 label_settings = SubResource("LabelSettings_eyl0o")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Warning" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+label_settings = SubResource("LabelSettings_7el1g")
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="AttributeDescription" type="Control" parent="HBoxContainer/VBoxContainer/Attributes"]
 custom_minimum_size = Vector2(720, 540)
@@ -1684,6 +1710,7 @@ label_settings = SubResource("LabelSettings_owi7x")
 autowrap_mode = 3
 
 [node name="Perks" type="Control" parent="HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -1744,6 +1771,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3B"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1767,6 +1795,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/3/3C"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1799,6 +1828,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2A"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1822,6 +1852,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2B"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1845,6 +1876,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/2/2C"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1877,6 +1909,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1A"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1900,6 +1933,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1B"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")
@@ -1923,6 +1957,7 @@ stretch_mode = 5
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Perks/VBoxContainer/1/1C"]
 visible = false
 custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("4_fmcnj")

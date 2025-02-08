@@ -11,7 +11,7 @@ const HEADBOB_MOVE_AMOUNT = 0.06
 const HEADBOB_FREQUENCY = 2.4
 var headbob_time = 0.0
 
-#Character state
+#Character stats
 @export var health := 100.0
 @export var max_health := 100.0
 
@@ -22,18 +22,18 @@ var headbob_time = 0.0
 	"strength" : 5,
 	"perception" : 6
 }
-@export var skill_available_points :int = 6
+@export var skill_available_points :int = 10
 
 @export var skills = {
-	"endurance" = 2,
-	"resilience" = 2,
-	"melee" = 2,
-	"intimidation" = 2,
-	"handguns" = 2,
-	"longguns" = 2
+	"endurance" = 10,
+	"resilience" = 10,
+	"melee" = 10,
+	"intimidation" = 10,
+	"handguns" = 10,
+	"longguns" = 10
 }
 
-@export var perk_available_points :int = 6
+@export var perk_available_points :int = 0
 
 @export var perks = {
 	"1a" : false,
@@ -46,7 +46,12 @@ var headbob_time = 0.0
 	"3b" : false,
 	"3c" : false,
 }
-
+@export var experience = {
+	"curr_lvl_exp" : 0,
+	"total_exp" : 0,
+	"req_exp" : 0
+}
+@export var curr_level = 1
 #@export var perk_1a : bool = false
 #@export var perk_1b : bool = false
 #@export var perk_1c : bool = false
@@ -91,6 +96,7 @@ var is_crouched := false
 
 
 func _ready() -> void:
+	#return_req_exp()
 	update_viwe_and_world_model_masks()
 		
 
@@ -409,7 +415,20 @@ func _handle_noclip(delta) -> bool:
 		self.global_position += self.velocity * delta
 		
 	return noclip
-		
+	
+#func return_req_exp():
+	#experience["req_exp"] = $LevellingSystem.experience_required
+	
+func gain_exp(amt: int):
+	$LevellingSystem.gain_experience(amt)
+	#return_req_exp()
+	
+func on_level_up(skill_points_gain: int):
+	skill_available_points += skill_points_gain
+	curr_level = $LevellingSystem.curr_level
+	if curr_level % 2 == 0:
+		perk_available_points += 1
+	
 @onready var animation_tree : AnimationTree = $"WorldModel/desert droid container/AnimationTree"
 @onready var state_machine_playback : AnimationNodeStateMachinePlayback = $"WorldModel/desert droid container/AnimationTree".get("parameters/playback")
 func update_animations():

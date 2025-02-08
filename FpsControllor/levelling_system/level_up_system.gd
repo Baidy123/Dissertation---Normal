@@ -6,9 +6,14 @@ extends Node3D
 @export var curr_level : int = 1
 @export var max_level : int = 12
 
-@export var skill_points_gained : int
-var experience : int = 0
-var experience_total : int = 0
+@export var skill_points_gained : int = 10
+
+var constitution : int = 0
+var strength : int = 0
+var perception : int = 0
+
+#var experience : int = 0
+#var experience_total : int = 0
 var experience_required : int = get_required_experience(curr_level + 1)
 
 @export var perk_requirement = {
@@ -61,9 +66,11 @@ var experience_required : int = get_required_experience(curr_level + 1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var constitution = player_stats.constitution
-	var strength = player_stats.strength
-	var perception = player_stats.perception
+	constitution = player.attributes["constitution"]
+	strength = player.attributes["strength"]
+	perception = player.attributes["perception"]
+	curr_level = player.curr_level
+	player.experience["req_exp"] = experience_required
 
 func get_required_experience(level):
 	if curr_level < max_level:
@@ -73,21 +80,31 @@ func get_required_experience(level):
 		
 func gain_experience(amount):
 	if curr_level < max_level:
-		experience_total += amount
-		experience += amount
-		while experience >= experience_required:
-			experience -= experience_required
+		player.experience["total_exp"] += amount
+		player.experience["curr_lvl_exp"] += amount
+		while player.experience["curr_lvl_exp"] >= experience_required:
+			player.experience["curr_lvl_exp"] -= experience_required
 			level_up()
 
 func level_up():
 	if curr_level < max_level:
 		curr_level += 1
 		experience_required = get_required_experience(curr_level + 1)
-		if player_stats and player_stats.has_method("on_level_up"):
-			player_stats.on_level_up(skill_points_gained)
+		player.experience["req_exp"] = experience_required
+		if player and player.has_method("on_level_up"):
+			player.on_level_up(skill_points_gained)
+			print(curr_level)
+			
+			print(experience_required)
+			
 
 		#print("Level up! current level:", curr_level)
-
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("gain_exp"):
+		gain_experience(100)
+		print(player.experience["total_exp"])
+		print(player.experience["curr_lvl_exp"])
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
