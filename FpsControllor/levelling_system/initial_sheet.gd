@@ -19,8 +19,16 @@ var intimidation_add = 0
 var handguns_add = 0
 var longguns_add = 0
 
-var selected_aptitude_button: TextureButton = null  # 用来记录当前选中的按钮引用
-var selected_aptitude_id: String = ""        # 用来记录当前选中的 aptitude id
+var selected_aptitude_button: TextureButton = null  
+var selected_aptitude_id: String = ""     
+   
+var default_attributes = {
+	"constitution": 3,
+	"strength": 3,
+	"perception": 3,
+}
+var default_attribute_points = 9
+
 
 func _ready() -> void:
 	if character and character.has_node("PlayerHUD"):
@@ -42,7 +50,7 @@ func _ready() -> void:
 	for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
-	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
+	
 	if attribute_available_points == 0:
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints.set_visible(false)
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
@@ -59,7 +67,7 @@ func _ready() -> void:
 	for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
-	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
+	
 	if skill_available_points == 0:
 		pass
 		#$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints.set_visible(false)
@@ -77,6 +85,8 @@ func _ready() -> void:
 func load_stats():
 	if character:
 		#if $HBoxContainer/VBoxContainer/Attributes.visible == true:
+		%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
+		%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/Constitution/Panel/Stats/Value.set_text(str(character.attributes["constitution"]))
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/Strength/Panel/Stats/Value.set_text(str(character.attributes["strength"]))
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/Perception/Panel/Stats/Value.set_text(str(character.attributes["perception"]))
@@ -173,12 +183,7 @@ func _on_attribute_confirm_pressed() -> void:
 		character.attributes["constitution"] += constitution_add
 		character.attributes["strength"] += strength_add
 		character.attributes["perception"] += perception_add
-		character.skills["endurance"] += constitution_add * 5
-		character.skills["resilience"] += constitution_add * 5
-		character.skills["melee"] += strength_add * 5
-		character.skills["intimidation"] += strength_add * 5
-		character.skills["handguns"] += perception_add * 5
-		character.skills["longguns"] += perception_add * 5
+		update_skills_from_attributes()
 		
 		strength_add = 0
 		constitution_add = 0
@@ -189,9 +194,10 @@ func _on_attribute_confirm_pressed() -> void:
 			button.set_visible(false)
 		for label in get_tree().get_nodes_in_group("AttributeChangeLabels"):
 			label.set_text(" ")
+		$HBoxContainer/VBoxContainer/Attributes/AttributeName/Reset.set_visible(true)
 		if attribute_available_points == 0:
 			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
-
+			
 func _on_skill_confirm_pressed() -> void:
 	if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
 		print("Nothing changed")
@@ -216,32 +222,74 @@ func _on_skill_confirm_pressed() -> void:
 			label.set_text(" ")
 
 func _on_aptitude_confirm_pressed() -> void:
-	# 当点击“确认”按钮时的逻辑
 	if selected_aptitude_button == null:
 		$HBoxContainer/VBoxContainer/Aptitude/AptitudeName/Warning.text = "Please select an Aptitude..."
 		return
 
-	# 如果有 character 节点或脚本，就把选中的 aptitude 存到角色数据里
-	# 假设 character 有一个变量：character.aptitude
 	if character:
 		character.aptitude = selected_aptitude_id
 	if selected_aptitude_id.to_lower() == "firefighter":
 		character.attributes["constitution"] += 2
 		character.attributes["strength"] += 2
+		character.attributes["perception"] -= 1
+		
+
 		
 	if selected_aptitude_id.to_lower() == "assassin":
-		character.attributes["perception"] += 6
+		character.attributes["perception"] += 5
 		character.attributes["strength"] -= 1
-		character.attributes["constitution"] -= 3
+		character.attributes["constitution"] -= 2
+
 		
 	if selected_aptitude_id.to_lower() == "soldier":
 		character.attributes['constitution'] += 1
 		character.attributes["strength"] += 1
 		character.attributes["perception"] += 2
 
-	# 确认后可以关闭此界面或做其它操作
+	update_skills_from_attributes()
 	queue_free()
 
+func _on_attribute_reset_pressed() -> void:
+	# 将角色的 attributes、可用点数都恢复到初始值
+	character.attributes["constitution"] = default_attributes["constitution"]
+	character.attributes["strength"]     = default_attributes["strength"]
+	character.attributes["perception"]   = default_attributes["perception"]
+	character.attribute_available_points = default_attribute_points
+	attribute_available_points = character.attribute_available_points
+
+	constitution_add = 0
+	strength_add = 0
+	perception_add = 0
+
+	update_skills_from_attributes()
+	load_stats()
+	for label in get_tree().get_nodes_in_group("AttributeChangeLabels"):
+		label.set_text(" ")
+	for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
+			button.set_disabled(true)
+			button.set_visible(false)
+	if character.attribute_available_points > 0:
+		for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
+			button.set_disabled(false)
+			button.set_visible(true)
+
+	$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(true)
+	$HBoxContainer/VBoxContainer/Attributes/AttributeName/Reset.set_visible(false)
+	
+func update_skills_from_attributes() -> void:
+	if not character:
+		return
+	
+	# 直接覆盖赋值
+	character.skills["endurance"]    = character.attributes["constitution"] * 5
+	character.skills["resilience"]   = character.attributes["constitution"] * 5
+	character.skills["melee"]        = character.attributes["strength"]    * 5
+	character.skills["intimidation"] = character.attributes["strength"]    * 5
+	character.skills["handguns"]     = character.attributes["perception"]  * 5
+	character.skills["longguns"]     = character.attributes["perception"]  * 5
+	
+	# 刷新界面显示
+	load_stats()
 
 func _process(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:

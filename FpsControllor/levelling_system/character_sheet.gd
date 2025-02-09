@@ -20,6 +20,8 @@ var longguns_add = 0
 @onready var levelling_sys = get_node("../../Player/LevellingSystem")
 
 func _ready() -> void:
+	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").set_visible(false)
 		character.get_node("PlayerHUD").set_process_unhandled_input(false) 
@@ -278,10 +280,10 @@ func _on_skill_confirm_pressed() -> void:
 
 
 
-func _process(delta):
-	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		
+#func _process(delta):
+	#if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
+		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#
 func _exit_tree():
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  
@@ -301,20 +303,14 @@ func _on_attribute_pressed() -> void:
 
 
 func _on_skills_pressed() -> void:
-	if attribute_available_points != 0:
-		%Warning.text = "You must assign the attributes first..."
-	else:
-		$HBoxContainer/VBoxContainer/Attributes.hide()
-		$HBoxContainer/VBoxContainer/Skills.show()
-		$HBoxContainer/VBoxContainer/Perks.hide()
+	$HBoxContainer/VBoxContainer/Attributes.hide()
+	$HBoxContainer/VBoxContainer/Skills.show()
+	$HBoxContainer/VBoxContainer/Perks.hide()
 
 
 
 func _on_perks_pressed() -> void:
-	if attribute_available_points != 0:
-		%Warning.text = "You must assign the attributes first..."
-	else:
-		$HBoxContainer/VBoxContainer/Attributes.hide()
-		$HBoxContainer/VBoxContainer/Skills.hide()
-		$HBoxContainer/VBoxContainer/Perks.show()
-		load_perks()
+	$HBoxContainer/VBoxContainer/Attributes.hide()
+	$HBoxContainer/VBoxContainer/Skills.hide()
+	$HBoxContainer/VBoxContainer/Perks.show()
+	load_perks()
