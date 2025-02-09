@@ -1,7 +1,7 @@
+class_name LevellingSystem
 extends Node3D
 
 @export var player : Player
-@export var player_stats: PlayerStats
 
 @export var curr_level : int = 1
 @export var max_level : int = 12

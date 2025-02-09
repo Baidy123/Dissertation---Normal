@@ -15,6 +15,7 @@ var headbob_time = 0.0
 @export var health := 100.0
 @export var max_health := 100.0
 
+@export var aptitude : String = " "
 @export var attribute_available_points :int = 6
 
 @export var attributes = {

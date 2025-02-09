@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://p5a5jm3h7rha"]
+[gd_scene load_steps=20 format=3 uid="uid://p5a5jm3h7rha"]
 
 [ext_resource type="Script" path="res://FpsControllor/levelling_system/character_sheet.gd" id="1_xfc86"]
 [ext_resource type="Texture2D" uid="uid://yff03im7mmrw" path="res://FpsControllor/levelling_system/BulletTime.webp" id="2_dt4ng"]
@@ -17,6 +17,10 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="LabelSettings" id="LabelSettings_76qm8"]
+font_size = 26
+font_color = Color(0.439216, 0.803922, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p730q"]
 font_size = 26
 font_color = Color(0.439216, 0.803922, 1, 1)
 
@@ -137,13 +141,18 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Level" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 size_flags_vertical = 1
 label_settings = SubResource("LabelSettings_76qm8")
 
+[node name="Aptitude" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+label_settings = SubResource("LabelSettings_p730q")
+
 [node name="Exp" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 label_settings = SubResource("LabelSettings_76qm8")
 

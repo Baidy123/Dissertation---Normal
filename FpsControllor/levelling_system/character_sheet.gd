@@ -1,5 +1,7 @@
 extends Control
 
+
+
 var skill_available_points : int
 var attribute_available_points : int 
 var perk_available_points :int 
@@ -14,10 +16,8 @@ var melee_add = 0
 var intimidation_add = 0
 var handguns_add = 0
 var longguns_add = 0
-
-
-@onready var character = get_node("../../")
-@onready var levelling_sys = get_node("../../LevellingSystem")
+@onready var character = get_node("../../Player")
+@onready var levelling_sys = get_node("../../Player/LevellingSystem")
 
 func _ready() -> void:
 	if character and character.has_node("PlayerHUD"):
@@ -69,6 +69,7 @@ func load_stats():
 	if character:
 		#if $HBoxContainer/VBoxContainer/Attributes.visible == true:
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer/Level.set_text("Lvl." + str(character.curr_level))
+		$HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer/Aptitude.set_text(str(character.aptitude))
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/MarginContainer/VBoxContainer/Exp.set_text("Exp. :" + str(character.experience["curr_lvl_exp"]) + "/" 
 																												+ str(character.experience["req_exp"]))
 		$HBoxContainer/VBoxContainer/Attributes/AttributeName/Constitution/Panel/Stats/Value.set_text(str(character.attributes["constitution"]))
@@ -205,33 +206,22 @@ func decrease_skill(stat: String):
 func spend_perk_points(perk_id: String):
 	if not character:
 		return
-
 	if not levelling_sys.perk_requirement.has(perk_id):
 		return
-		
 	var req_dict = levelling_sys.perk_requirement[perk_id]
-
 	var cost = 1
 	if req_dict.has("points"):
 		cost = req_dict["points"]
-
-
 	character.perks[perk_id] = true
-
 	character.perk_available_points -= cost
-
 	%PerkPoints.set_text("Points: " + str(character.perk_available_points))
-
 	for button in get_tree().get_nodes_in_group("PerksButtons"):
-
 		if button.get_name().to_lower() == perk_id:
-			
 			if button.has_node("TextureRect"):
 				var child_node = button.get_node("TextureRect")
-				
 				child_node.visible = character.perks[perk_id]  
-
 			button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			load_perks()
 			break
 
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=4 uid="uid://cumlkudt7n44b"]
+[gd_scene load_steps=74 format=4 uid="uid://cumlkudt7n44b"]
 
 [ext_resource type="Material" uid="uid://bk7nbd8td4gb1" path="res://textures/grey_checkerboard_mat.tres" id="1_1bstl"]
 [ext_resource type="Texture2D" uid="uid://d1uelfks0ip1w" path="res://textures/grid_image.png" id="2_uym2f"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://models/InteractableComponent.gd" id="8_252b7"]
 [ext_resource type="PackedScene" uid="uid://7dm87wp0hyjg" path="res://models/wiggly_hair.tscn" id="9_h741b"]
 [ext_resource type="PackedScene" uid="uid://dv5h2pyptm0nv" path="res://FpsControllor/player.tscn" id="9_jv3qt"]
+[ext_resource type="PackedScene" uid="uid://dghibg1q8ctm2" path="res://gui.tscn" id="10_ny2mb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bwjpn"]
 
@@ -1011,6 +1012,8 @@ font_size = 96
 
 [node name="Player" parent="." instance=ExtResource("9_jv3qt")]
 unique_name_in_owner = true
+
+[node name="GUI" parent="." instance=ExtResource("10_ny2mb")]
 
 [connection signal="interacted" from="Button/InteractableComponent" to="Button/Door" method="toggle_open"]
 [connection signal="interacted" from="Button/InteractableComponent" to="Button/AnimationPlayer" method="play" binds= ["door_open"]]
