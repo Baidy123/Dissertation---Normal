@@ -20,8 +20,6 @@ var longguns_add = 0
 @onready var levelling_sys = get_node("../../Player/LevellingSystem")
 
 func _ready() -> void:
-	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").set_visible(false)
 		character.get_node("PlayerHUD").set_process_unhandled_input(false) 
@@ -247,7 +245,6 @@ func _on_attribute_confirm_pressed() -> void:
 		perception_add = 0
 		load_stats()
 		for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
-			#button.set_disabled(true)
 			button.set_visible(false)
 		for label in get_tree().get_nodes_in_group("AttributeChangeLabels"):
 			label.set_text(" ")
@@ -280,10 +277,10 @@ func _on_skill_confirm_pressed() -> void:
 
 
 
-#func _process(delta):
-	#if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
-		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		#
+func _process(delta):
+	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		
 func _exit_tree():
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  

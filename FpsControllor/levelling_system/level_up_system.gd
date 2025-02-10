@@ -122,20 +122,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 		
 #PERKS
-var jump_twice = false
 #1a
-func qinggong(delta):
-	if jump_twice == false and Input.is_action_just_pressed("jump"):
-			player.velocity.y = player.jump_velocity
-			jump_twice = true
+var jump_twice = false
+func qinggong(delta: float) -> void:
+	if not jump_twice and Input.is_action_just_pressed("jump"):
+		player.velocity.y = player.jump_velocity
+		jump_twice = true
+
+	var base_multiplier = 1.0
+	if deserter_active:
+		base_multiplier *= 2.0   
 	if Input.is_action_pressed("sprint"):
-			player.velocity.x = player.wish_dir.x * player.walk_speed * player.sprint_multi
-			player.velocity.z = player.wish_dir.z * player.walk_speed * player.sprint_multi
-	else:
-		player.velocity.x = player.wish_dir.x * player.walk_speed
-		player.velocity.z = player.wish_dir.z * player.walk_speed
-	
+		base_multiplier *= player.sprint_multi 
+
+	player.velocity.x = player.wish_dir.x * player.walk_speed * base_multiplier
+	player.velocity.z = player.wish_dir.z * player.walk_speed * base_multiplier
+
 	player.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+
 
 var is_bullet_time_active = false
 #1b
