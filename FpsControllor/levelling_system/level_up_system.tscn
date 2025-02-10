@@ -4,3 +4,4 @@
 
 [node name="LevelUpSystem" type="Node3D"]
 script = ExtResource("1_nre0t")
+slow_factor = 0.2

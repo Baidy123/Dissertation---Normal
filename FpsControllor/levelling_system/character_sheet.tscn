@@ -976,7 +976,7 @@ grow_vertical = 2
 [node name="Name" type="Label" parent="HBoxContainer/VBoxContainer/Skills/SkillName/Resilience/Panel/Stats"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resilience"
+text = "Health"
 label_settings = SubResource("LabelSettings_76qm8")
 
 [node name="Change" type="Label" parent="HBoxContainer/VBoxContainer/Skills/SkillName/Resilience/Panel/Stats" groups=["SkillChangeLabels"]]

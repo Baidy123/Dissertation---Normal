@@ -114,6 +114,10 @@ func reload():
 		weapon_manager.is_reloading = false
 	
 func on_equip():
+	if !pack_rat :
+		if check_perk_pr():
+			max_reserve_ammo *= 2
+			#reserve_ammo *= 2
 	weapon_manager.play_sound(unholster_sound)
 	weapon_manager.play_anim(view_equip_anim)
 	weapon_manager.queue_anim(view_idle_anim)
@@ -122,11 +126,18 @@ func on_equip():
 func on_unequip():
 	pass
 	
-#var is_moving := false
+
 func get_player_velocity():
-	#is_moving = true
 	return weapon_manager.get_parent().velocity.length()
 	
+func check_perk_cb():
+	return weapon_manager.get_parent().perks["2b"]
+
+var pack_rat := false
+func check_perk_pr():
+	pack_rat = weapon_manager.get_parent().perks["2c"]
+	return weapon_manager.get_parent().perks["2c"]
+
 var num_shots_fired : int = 0
 func fire_shot():
 	weapon_manager.play_anim(view_shoot_anim)
@@ -155,8 +166,12 @@ func fire_shot():
 		spread_y = 5
 	if spread_y <= -5:
 		spread_y = -5
+	
 	#print(spread_x)
-	raycast.target_position = Vector3(spread_x,spread_y,-abs(bullet_range))
+	if check_perk_cb() == true:
+		raycast.target_position = Vector3(spread_x * 0.1,spread_y *0.1,-abs(bullet_range))
+	else:
+		raycast.target_position = Vector3(spread_x,spread_y,-abs(bullet_range))
 	raycast.force_raycast_update()
 	
 	var bullet_target_pos = raycast.global_transform * raycast.target_position
@@ -169,7 +184,7 @@ func fire_shot():
 		if obj is RigidBody3D:
 			obj.apply_impulse(-nrml * impact_force / obj.mass, pt -obj.global_position)
 		if obj.has_method("take_damage"):
-			obj.take_damage(self.damage)
+			obj.take_damage(self.damage, " ")
 			
 	weapon_manager.show_muzzle_flash()
 	if num_shots_fired % 3 == 0:

@@ -53,16 +53,6 @@ var headbob_time = 0.0
 	"req_exp" : 0
 }
 @export var curr_level = 1
-#@export var perk_1a : bool = false
-#@export var perk_1b : bool = false
-#@export var perk_1c : bool = false
-#@export var perk_2a : bool = true
-#@export var perk_2b : bool = false
-#@export var perk_2c : bool = false
-#@export var perk_3a : bool = true
-#@export var perk_3b : bool = false
-#@export var perk_3c : bool = false
-
 
 
 
@@ -78,9 +68,7 @@ var headbob_time = 0.0
 @export var air_cap := 0.85
 @export var air_accel := 800.0
 @export var air_move_speed := 500.0
-@export var abi_to_jt = false
-@export var full_control_in_air := false
-var jump_twice = false
+
 
 var noclip_speed_multi := 4.0
 var noclip := false
@@ -112,16 +100,39 @@ func update_viwe_and_world_model_masks():
 			child.cast_shadow = false
 	%Camera3D.set_cull_mask_value(WORLD_MODEL_LAYER,false)
 		
-func take_damage(damage: float):
-	health -= damage
+func take_damage(damage: float, dmg_type: String):
+	if $LevellingSystem.die_hard_active:
+		return
+	if perks["3b"] == true:
+		if dmg_type == "explosion":
+			return
+	var final_damage = damage
+	if perks["1c"] == true:
+		final_damage = $LevellingSystem.tough_skin(damage)
+	health -= final_damage
+	if perks["2a"] == true:
+		$LevellingSystem.deserter()
+	if health <= 0:
+		if perks["3c"] == true:
+			$LevellingSystem.die_hard()
+			health = 1
+		else:
+			health = 0
+			get_tree().change_scene_to_file("res://StarterScene.tscn")
+	
 
 
 
 func get_speed() -> float:
 	#print(self.velocity.length())
+	var speed = walk_speed
 	if is_crouched:
-		return walk_speed * 0.75
-	return sprint_multi * walk_speed if Input.is_action_pressed("sprint") else walk_speed
+		speed *=  0.75
+	if Input.is_action_pressed("sprint"):
+		speed *= sprint_multi 
+	if $LevellingSystem.deserter_active :
+		speed *= 2
+	return speed
 	
 func is_surface_too_steep(normal: Vector3) -> bool:
 	return normal.angle_to(Vector3.UP) > self.floor_max_angle
@@ -148,6 +159,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			rotate_y(-event.relative.x * sensitivity)
 			%Camera3D.rotate_x(-event.relative.y * sensitivity)
 			%Camera3D.rotation.x = clamp(%Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad((90)))
+	if event.is_action_pressed("bullettime") and perks["1b"]:
+		$LevellingSystem.bullet_time()
 
 func get_interactable_component_at_shapecast() -> InteractableComponent:
 	for i in %InteractShapeCast3D.get_collision_count():
@@ -239,8 +252,12 @@ func _push_away_rigid_bodies():
 			c.get_collider().apply_impulse(push_dir * velocity_diff_in_push_dir * push_force, c.get_position() - c.get_collider().global_position)
 			
 func add_recoil(pitch: float, yaw: float) -> void:
-	target_recoil.x += pitch
-	target_recoil.y += yaw
+	if perks["2b"] == true:
+		target_recoil.x = $LevellingSystem.cowboy(pitch)
+		target_recoil.y = $LevellingSystem.cowboy(yaw)
+	else:
+		target_recoil.x += pitch
+		target_recoil.y += yaw
 
 func get_current_recoil() -> Vector2:
 	return current_recoil
@@ -339,16 +356,17 @@ func _handle_ladder_physics() -> bool:
 	return true
 
 func _handle_air_physics(delta):
-	if abi_to_jt == true and jump_twice == false and Input.is_action_just_pressed("jump"):
-			self.velocity.y = jump_velocity
-			jump_twice = true
-	#Full control in air
-	if full_control_in_air == true:
-		self.velocity.x = wish_dir.x * 6.2
-		self.velocity.z = wish_dir.z * 6.2
-		self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
-		#print(self.velocity.length())
-		
+	#if abi_to_jt == true and jump_twice == false and Input.is_action_just_pressed("jump"):
+			#self.velocity.y = jump_velocity
+			#jump_twice = true
+	##Full control in air
+	#if full_control_in_air == true:
+		#self.velocity.x = wish_dir.x * 6.2
+		#self.velocity.z = wish_dir.z * 6.2
+		#self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+		##print(self.velocity.length())
+	if perks["1a"] == true:
+		$LevellingSystem.qinggong(delta)
 	#BHOP in air
 	else:
 		self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
@@ -476,7 +494,7 @@ func _physics_process(delta: float) -> void:
 	
 	if not _handle_noclip(delta) and not _handle_ladder_physics():
 		if is_on_floor() or _snapped_to_stairs_last_frame:
-			jump_twice = false
+			$LevellingSystem.jump_twice = false
 			_handle_ground_physics(delta)
 			if is_crouched:
 				if Input.is_action_just_pressed("jump"):

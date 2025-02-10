@@ -44,7 +44,7 @@ func push_away_objects():
 			body.velocity += explosion_vec * explosion_force
 		
 		if body.has_method(\"take_damage\"):
-			body.take_damage(explosion_damage)
+			body.take_damage(explosion_damage, \"explosion\")
 "
 
 [sub_resource type="Curve" id="Curve_1v6hd"]

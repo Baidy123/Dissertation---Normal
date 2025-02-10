@@ -32,7 +32,9 @@ func fire_shot():
 			obj.add_sibling(blood_splatter)
 			blood_splatter.global_position = pt
 		elif obj.has_method("take_damage"):
-			obj.take_damage(self.damage)
+			obj.take_damage(self.damage, " ")
+		if weapon_manager.get_parent().perks["3a"] == true:
+			weapon_manager.get_parent().health += self.damage * 0.2
 	else:
 		weapon_manager.play_sound(miss_sound)
 	
