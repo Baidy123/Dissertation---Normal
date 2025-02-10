@@ -35,12 +35,19 @@ func _ready() -> void:
 		character.get_node("PlayerHUD").set_visible(false)
 		character.get_node("PlayerHUD").set_process_unhandled_input(false) 
 		
-	load_stats()
-
 	attribute_available_points = character.attribute_available_points
 	skill_available_points = character.skill_available_points
-
-
+	load_stats()
+	
+	#if not "skills_attribute" in character:
+		#character.skills_attribute = {
+			#"endurance": 0,
+			#"resilience": 0,
+			#"melee": 0,
+			#"intimidation": 0,
+			#"handguns": 0,
+			#"longguns": 0
+		#}
 	$HBoxContainer/VBoxContainer/Attributes.set_visible(true)
 	$HBoxContainer/VBoxContainer/Skills.set_visible(false)
 	$HBoxContainer/VBoxContainer/Aptitude.set_visible(false)
@@ -250,7 +257,6 @@ func _on_aptitude_confirm_pressed() -> void:
 	queue_free()
 
 func _on_attribute_reset_pressed() -> void:
-	# 将角色的 attributes、可用点数都恢复到初始值
 	character.attributes["constitution"] = default_attributes["constitution"]
 	character.attributes["strength"]     = default_attributes["strength"]
 	character.attributes["perception"]   = default_attributes["perception"]
@@ -279,23 +285,61 @@ func _on_attribute_reset_pressed() -> void:
 func update_skills_from_attributes() -> void:
 	if not character:
 		return
-	
-	# 直接覆盖赋值
-	character.skills["endurance"]    = character.attributes["constitution"] * 5
-	character.skills["resilience"]   = character.attributes["constitution"] * 5
-	character.skills["melee"]        = character.attributes["strength"]    * 5
-	character.skills["intimidation"] = character.attributes["strength"]    * 5
-	character.skills["handguns"]     = character.attributes["perception"]  * 5
-	character.skills["longguns"]     = character.attributes["perception"]  * 5
-	
-	# 刷新界面显示
+	# constitution → endurance, resilience
+	var old_end = character.skills_attribute["endurance"]
+	var new_end = character.attributes["constitution"] * 5
+	var diff_end = new_end - old_end
+	character.skills["endurance"] += diff_end
+	character.skills_attribute["endurance"] = new_end
+
+	var old_res = character.skills_attribute["resilience"]
+	var new_res = character.attributes["constitution"] * 5
+	var diff_res = new_res - old_res
+	character.skills["resilience"] += diff_res
+	character.skills_attribute["resilience"] = new_res
+
+	# strength → melee, intimidation
+	var old_melee = character.skills_attribute["melee"]
+	var new_melee = character.attributes["strength"] * 5
+	var diff_melee = new_melee - old_melee
+	character.skills["melee"] += diff_melee
+	character.skills_attribute["melee"] = new_melee
+
+	var old_inti = character.skills_attribute["intimidation"]
+	var new_inti = character.attributes["strength"] * 5
+	var diff_inti = new_inti - old_inti
+	character.skills["intimidation"] += diff_inti
+	character.skills_attribute["intimidation"] = new_inti
+
+	# perception → handguns, longguns
+	var old_handguns = character.skills_attribute["handguns"]
+	var new_handguns = character.attributes["perception"] * 5
+	var diff_handguns = new_handguns - old_handguns
+	character.skills["handguns"] += diff_handguns
+	character.skills_attribute["handguns"] = new_handguns
+
+	var old_longguns = character.skills_attribute["longguns"]
+	var new_longguns = character.attributes["perception"] * 5
+	var diff_longguns = new_longguns - old_longguns
+	character.skills["longguns"] += diff_longguns
+	character.skills_attribute["longguns"] = new_longguns
 	load_stats()
+
 
 func _process(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
+func update_influence_from_skills():
+	character.skills_influence["endurance"] = 1 + max(0, character.skills["endurance"] -15) * 0.005
+	character.skills_influence["resilience"] = max(0, character.skills["resilience"] -15) * 0.002
+	character.skills_influence["melee"] = 1 + max(0, character.skills["melee"] -15) * 0.05
+	character.skills_influence["intimidation"] = max(0, character.skills["intimidation"] -15) * 0.005
+	character.skills_influence["handguns"] = max(0, character.skills["handguns"] -15) * 0.0025
+	character.skills_influence["longguns"] = max(0, character.skills["longguns"] -15) * 0.0025
+	
 func _exit_tree():
+	update_influence_from_skills()
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)

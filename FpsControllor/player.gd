@@ -26,14 +26,31 @@ var headbob_time = 0.0
 @export var skill_available_points :int = 10
 
 @export var skills = {
-	"endurance" = 10,
-	"resilience" = 10,
-	"melee" = 10,
-	"intimidation" = 10,
-	"handguns" = 10,
-	"longguns" = 10
+	"endurance" = 0,
+	"resilience" = 0,
+	"melee" = 0,
+	"intimidation" = 0,
+	"handguns" = 0,
+	"longguns" = 0
 }
 
+var skills_influence = {
+	"endurance" : 1,
+	"resilience" : 0,
+	"melee" : 1,
+	"intimidation" : 0,
+	"handguns" : 0,
+	"longguns" : 0
+} 
+
+var skills_attribute = {
+	"endurance": 0,
+	"resilience": 0,
+	"melee": 0,
+	"intimidation": 0,
+	"handguns": 0,
+	"longguns": 0
+}
 @export var perk_available_points :int = 0
 
 @export var perks = {
@@ -53,7 +70,6 @@ var headbob_time = 0.0
 	"req_exp" : 0
 }
 @export var curr_level = 1
-
 
 
 #Ground movement settings
@@ -80,12 +96,12 @@ var _last_frame_was_on_floor := -INF
 const VIEW_MODEL_LAYER = 9
 const WORLD_MODEL_LAYER = 2
 const CROUCH_TRANSLATE = 0.7
+
 var is_crouched := false
 
 
 
 func _ready() -> void:
-	#return_req_exp()
 	update_viwe_and_world_model_masks()
 		
 
@@ -99,17 +115,18 @@ func update_viwe_and_world_model_masks():
 		if child is GeometryInstance3D:
 			child.cast_shadow = false
 	%Camera3D.set_cull_mask_value(WORLD_MODEL_LAYER,false)
-		
+	
+var dmg_reduce_rate : float = 0
 func take_damage(damage: float, dmg_type: String):
 	if $LevellingSystem.die_hard_active:
 		return
 	if perks["3b"] == true:
 		if dmg_type == "explosion":
 			return
-	var final_damage = damage
+	var final_damage = damage * (max(0.5, 1 - skills_influence["resilience"]))
 	if perks["1c"] == true:
-		final_damage = $LevellingSystem.tough_skin(damage)
-	health -= final_damage
+		final_damage = $LevellingSystem.tough_skin(final_damage)
+	health -= int(final_damage)
 	if perks["2a"] == true:
 		$LevellingSystem.deserter()
 	if health <= 0:
@@ -120,16 +137,18 @@ func take_damage(damage: float, dmg_type: String):
 			health = 0
 			get_tree().change_scene_to_file("res://StarterScene.tscn")
 	
-
-
-
+	
+var is_sprinting :bool = false 
+var sprint_limit: float = 5.0 * skills_influence["endurance"]
+var sprint_remaining_time := sprint_limit
+var sprint_cooldown: float = 3.0
+var sprint_cooldown_remaining: float = 0.0
 func get_speed() -> float:
-	#print(self.velocity.length())
 	var speed = walk_speed
 	if is_crouched:
 		speed *=  0.75
-	if Input.is_action_pressed("sprint"):
-		speed *= sprint_multi 
+	if  is_sprinting:
+		speed *= sprint_multi * skills_influence["endurance"]
 	if $LevellingSystem.deserter_active :
 		speed *= 2
 	return speed
@@ -481,13 +500,33 @@ func _process(delta) -> void:
 			
 	update_animations()
 	update_recoil(delta)
-	
+			
 func _physics_process(delta: float) -> void:
 
 	var input_dir := Input.get_vector("left", "right", "up", "down").normalized()
 	wish_dir = self.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)
 	camera_aligned_wish_dir = %Camera3D.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)
-	
+	if sprint_cooldown_remaining > 0.0:
+		sprint_cooldown_remaining -= delta
+		if sprint_cooldown_remaining < 0.0:
+			sprint_cooldown_remaining = 0.0
+	var wants_to_sprint = Input.is_action_pressed("sprint")
+	if wants_to_sprint:
+		if sprint_cooldown_remaining <= 0.0 and sprint_remaining_time > 0.0:
+			is_sprinting = true
+		else:
+			is_sprinting = false
+	else:
+		is_sprinting = false
+	if is_sprinting:
+		sprint_remaining_time -= delta
+		if sprint_remaining_time <= 0.0:
+			sprint_remaining_time = 0.0
+			is_sprinting = false
+			sprint_cooldown_remaining = sprint_cooldown
+	else:
+		sprint_remaining_time = min(sprint_remaining_time + delta, sprint_limit)
+		
 	if is_on_floor():
 		_last_frame_was_on_floor = Engine.get_physics_frames()
 		_handle_crouch(delta)
@@ -496,6 +535,7 @@ func _physics_process(delta: float) -> void:
 		if is_on_floor() or _snapped_to_stairs_last_frame:
 			$LevellingSystem.jump_twice = false
 			_handle_ground_physics(delta)
+
 			if is_crouched:
 				if Input.is_action_just_pressed("jump"):
 					is_crouched = false

@@ -138,6 +138,13 @@ func check_perk_pr():
 	pack_rat = weapon_manager.get_parent().perks["2c"]
 	return weapon_manager.get_parent().perks["2c"]
 
+func get_player_handguns():
+	#print(weapon_manager.get_parent().skills_influence["handguns"])
+	return weapon_manager.get_parent().skills_influence["handguns"]
+
+func get_player_longguns():
+	return weapon_manager.get_parent().skills_influence["longguns"]
+
 var num_shots_fired : int = 0
 func fire_shot():
 	weapon_manager.play_anim(view_shoot_anim)
@@ -147,14 +154,6 @@ func fire_shot():
 	var raycast = weapon_manager.bullet_raycast
 	raycast.rotation.x = weapon_manager.get_current_recoil().x
 	raycast.rotation.y = weapon_manager.get_current_recoil().y
-	#var velocity = get_player_velocity()
-	#if is_moving:w
-		#var spread_x := randf_range(get_player_velocity() * -100, get_player_velocity()*100)
-		#var spread_y := randf_range(get_player_velocity() * -100, get_player_velocity()*100)
-		#print(spread_x)
-		#raycast.target_position = Vector3(spread_x,spread_y,-abs(bullet_range))
-	#else:
-		#raycast.target_position = Vector3(0,0,-abs(bullet_range))
 
 	var spread_x := randf_range(get_player_velocity() * bullet_spread * -0.5, get_player_velocity() * bullet_spread *  0.5)
 	var spread_y := randf_range(get_player_velocity() * bullet_spread * -0.5, get_player_velocity() * bullet_spread * 0.5)
@@ -171,7 +170,15 @@ func fire_shot():
 	if check_perk_cb() == true:
 		raycast.target_position = Vector3(spread_x * 0.1,spread_y *0.1,-abs(bullet_range))
 	else:
-		raycast.target_position = Vector3(spread_x,spread_y,-abs(bullet_range))
+		#handgun
+		if slot == 2:
+			#print(max(0, (1- get_player_handguns())))
+			raycast.target_position = Vector3(max(0.5, (1- get_player_handguns())) * spread_x,max(0.5, (1- get_player_handguns())) * 
+												spread_y,-abs(bullet_range))
+		#longgun
+		else:
+			raycast.target_position = Vector3(max(0.5, (1- get_player_longguns())) * spread_x,max(0.5, (1- get_player_longguns())) * 
+												spread_y,-abs(bullet_range))
 	raycast.force_raycast_update()
 	
 	var bullet_target_pos = raycast.global_transform * raycast.target_position
@@ -189,8 +196,14 @@ func fire_shot():
 	weapon_manager.show_muzzle_flash()
 	if num_shots_fired % 3 == 0:
 		weapon_manager.make_bullet_trail(bullet_target_pos)
-	weapon_manager.apply_recoil(v_recoil, h_recoil)
-
+	#handgun
+	if slot == 2:
+		weapon_manager.apply_recoil(max(0.5, (1- get_player_handguns())) * v_recoil, 
+									max(0.5, (1- get_player_handguns())) * h_recoil)
+	#longgun
+	else:
+		weapon_manager.apply_recoil(max(0.5, (1- get_player_longguns())) * v_recoil, 
+									max(0.5, (1- get_player_longguns())) * h_recoil)
 	last_fire_time = Time.get_ticks_msec()
 	current_ammo -= 1
 	num_shots_fired += 1

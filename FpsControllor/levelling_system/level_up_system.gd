@@ -72,7 +72,7 @@ var experience_required : int = get_required_experience(curr_level + 1)
 @export var bullet_time_cd := 0.0
 @export var deserter_cd := 0.0
 @export var die_hard_cd := 0.0
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	constitution = player.attributes["constitution"]
 	strength = player.attributes["strength"]
@@ -126,19 +126,19 @@ func _unhandled_input(event: InputEvent) -> void:
 var jump_twice = false
 func qinggong(delta: float) -> void:
 	if not jump_twice and Input.is_action_just_pressed("jump"):
-		player.velocity.y = player.jump_velocity
+		player.velocity.y = player.jump_velocity * 1.2
 		jump_twice = true
 
 	var base_multiplier = 1.0
 	if deserter_active:
 		base_multiplier *= 2.0   
-	if Input.is_action_pressed("sprint"):
+	if player.is_sprinting:
 		base_multiplier *= player.sprint_multi 
 
 	player.velocity.x = player.wish_dir.x * player.walk_speed * base_multiplier
 	player.velocity.z = player.wish_dir.z * player.walk_speed * base_multiplier
 
-	player.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+	player.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta * 0.8
 
 
 var is_bullet_time_active = false
@@ -159,6 +159,11 @@ func bullet_time():
 func bullet_time_cold_down():
 	await get_tree().create_timer(bullet_time_cd).timeout
 	bullet_time_cd = 0
+	$"../PlayerHUD".get_node("BulletTimeReminder").set_text("Bullet Time is ready...")
+	$"../PlayerHUD".get_node("BulletTimeReminder").set_visible(true)
+	await get_tree().create_timer(3.0).timeout
+	$"../PlayerHUD".get_node("BulletTimeReminder").set_visible(false)
+	
 #1c
 func tough_skin(dmg: float):
 	return dmg * dmg_reduce_rate
@@ -177,6 +182,11 @@ func deserter():
 func deserter_cold_down():
 	await get_tree().create_timer(deserter_cd).timeout
 	deserter_cd = 0
+	$"../PlayerHUD".get_node("DieHardReminder").set_text("Die Hard is ready...")
+	$"../PlayerHUD".get_node("DieHardReminder").set_visible(true)
+	await get_tree().create_timer(3.0).timeout
+	$"../PlayerHUD".get_node("DieHardReminder").set_visible(false)
+	
 #2b
 func cowboy(recoil: float):
 	return recoil * 0.1

@@ -281,12 +281,24 @@ func _process(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
-func _exit_tree():
+func update_influence_from_skills():
+	character.skills_influence["endurance"] = 1 + max(0, character.skills["endurance"] -15) * 0.005
+	character.skills_influence["resilience"] = max(0, character.skills["resilience"] -15) * 0.002
+	character.skills_influence["melee"] = 1 + max(0, character.skills["melee"] -15) * 0.05
+	character.skills_influence["intimidation"] = max(0, character.skills["intimidation"] -15) * 0.005
+	character.skills_influence["handguns"] = max(0, character.skills["handguns"] -15) * 0.0025
+	character.skills_influence["longguns"] = max(0, character.skills["longguns"] -15) * 0.0025
+	#print(character.skills_influence["handguns"])
+	
+func _exit_tree(): 
+	#character.sprint_multi *= 1+character.skills["endurance"]*0.01
+	#print(character.sprint_multi)
+	update_influence_from_skills()
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
+	
 
 
 
