@@ -39,15 +39,6 @@ func _ready() -> void:
 	skill_available_points = character.skill_available_points
 	load_stats()
 	
-	#if not "skills_attribute" in character:
-		#character.skills_attribute = {
-			#"endurance": 0,
-			#"resilience": 0,
-			#"melee": 0,
-			#"intimidation": 0,
-			#"handguns": 0,
-			#"longguns": 0
-		#}
 	$HBoxContainer/VBoxContainer/Attributes.set_visible(true)
 	$HBoxContainer/VBoxContainer/Skills.set_visible(false)
 	$HBoxContainer/VBoxContainer/Aptitude.set_visible(false)

@@ -95,10 +95,12 @@ func reload_pressed():
 		return
 	var cancel_cb = (func():
 		weapon_manager.stop_sounds())
-	weapon_manager.play_anim(view_reload_anim, reload, cancel_cb)
+	if slot == 2:
+		weapon_manager.play_anim(view_reload_anim, reload, cancel_cb, get_player_handguns())
+	else: 
+		weapon_manager.play_anim(view_reload_anim, reload, cancel_cb, get_player_longguns())
 	weapon_manager.queue_anim(view_idle_anim)
 	weapon_manager.play_sound(reload_sound)
-
 
 func reload():
 	var can_reload = get_amount_can_reload()

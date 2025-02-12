@@ -39,31 +39,38 @@ var experience_required : int = get_required_experience(curr_level + 1)
 		"points": 1
 	},
 	"2a": {
+		"name": "deserter",
 		"attribute": {"constitution": 3},
 		"skill": {"resilience": 40},
 		"points": 1
 	},
 	"2b": {
+		"name": "cowboy",
 		"attribute": {"constitution": 3},
-		"skill": {"resilience": 50},
+		"skill": {"handguns": 100,
+					"longguns": 100},
 		"points": 1
 	},
 	"2c": {
+		"name": "pack rat",
 		"attribute": {"constitution": 5},
 		"skill": {"resilience": 240},
 		"points": 1
 	},
 	"3a": {
+		"name": "vampire",
 		"attribute": {"constitution": 7},
 		"skill": {"resilience": 20},
 		"points": 1
 	},
 	"3b": {
+		"name": "flak jacket",
 		"attribute": {"constitution": 9},
 		"skill": {"resilience": 20},
 		"points": 1
 	},
 	"3c": {
+		"name": "die hard",
 		"attribute": {"strength": 10},
 		"skill": {"resilience": 20},
 		"points": 1
@@ -115,10 +122,10 @@ func level_up():
 		#print("Level up! current level:", curr_level)
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("gain_exp"):
-		#gain_experience(10000)
-		#print(player.experience["total_exp"])
-		#print(player.experience["curr_lvl_exp"])
-		player.take_damage(20, " ")
+		gain_experience(10000)
+		print(player.experience["total_exp"])
+		print(player.experience["curr_lvl_exp"])
+		#player.take_damage(20, " ")
 	
 		
 #PERKS

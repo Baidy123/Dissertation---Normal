@@ -1,9 +1,25 @@
-[gd_scene load_steps=20 format=3 uid="uid://p5a5jm3h7rha"]
+[gd_scene load_steps=36 format=3 uid="uid://p5a5jm3h7rha"]
 
 [ext_resource type="Script" path="res://FpsControllor/levelling_system/character_sheet.gd" id="1_xfc86"]
 [ext_resource type="Texture2D" uid="uid://yff03im7mmrw" path="res://FpsControllor/levelling_system/BulletTime.webp" id="2_dt4ng"]
+[ext_resource type="Texture2D" uid="uid://w4m1vo4rno6s" path="res://FpsControllor/levelling_system/Vampire.webp" id="2_j5jyr"]
+[ext_resource type="Texture2D" uid="uid://bbsj8vfn13bm7" path="res://FpsControllor/levelling_system/Vampire_disabled.webp" id="3_636e5"]
 [ext_resource type="Texture2D" uid="uid://c76ktl2vmnh4h" path="res://FpsControllor/levelling_system/BulletTime_disabled.webp" id="3_ndo4i"]
 [ext_resource type="Texture2D" uid="uid://bfudojlcf6nn7" path="res://FpsControllor/levelling_system/GlowFrame_CustomBlue.webp" id="4_fmcnj"]
+[ext_resource type="Texture2D" uid="uid://cwhpr0ijf3eeg" path="res://FpsControllor/levelling_system/FlakJacket.webp" id="5_ddb7q"]
+[ext_resource type="Texture2D" uid="uid://dtifric5mlqdi" path="res://FpsControllor/levelling_system/FlakJacket_disabled.webp" id="6_jx57d"]
+[ext_resource type="Texture2D" uid="uid://dftuu0wb2tc86" path="res://FpsControllor/levelling_system/DieHard.webp" id="7_1jlli"]
+[ext_resource type="Texture2D" uid="uid://8q6ttop4gopt" path="res://FpsControllor/levelling_system/DieHard_disabled.webp" id="8_gu0d8"]
+[ext_resource type="Texture2D" uid="uid://dk6udr4fgyy5g" path="res://FpsControllor/levelling_system/Deserter.webp" id="9_tymrr"]
+[ext_resource type="Texture2D" uid="uid://bp4l1sab5habg" path="res://FpsControllor/levelling_system/Deserter_disabled.webp" id="10_lm6rn"]
+[ext_resource type="Texture2D" uid="uid://cd24cj63whkaa" path="res://FpsControllor/levelling_system/Cowboy.webp" id="11_6v205"]
+[ext_resource type="Texture2D" uid="uid://bqsr3q0i4jdwg" path="res://FpsControllor/levelling_system/Cowboy_disabled.webp" id="12_l07a2"]
+[ext_resource type="Texture2D" uid="uid://ejd7evgrfvj6" path="res://FpsControllor/levelling_system/PackRat.webp" id="13_jro3e"]
+[ext_resource type="Texture2D" uid="uid://bwjn7yxpegwgl" path="res://FpsControllor/levelling_system/PackRat_disabled.webp" id="14_cfnei"]
+[ext_resource type="Texture2D" uid="uid://c1al0dx865brf" path="res://FpsControllor/levelling_system/Qinggong.webp" id="15_21qfw"]
+[ext_resource type="Texture2D" uid="uid://t3a2bp8gjjh6" path="res://FpsControllor/levelling_system/Qinggong_disabled.webp" id="16_ghduw"]
+[ext_resource type="Texture2D" uid="uid://68f6s8oti5vq" path="res://FpsControllor/levelling_system/ToughSkin.webp" id="19_ls15a"]
+[ext_resource type="Texture2D" uid="uid://dkplkynx8ux4y" path="res://FpsControllor/levelling_system/ToughSkin_disabled.webp" id="20_enhww"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lb3ni"]
 content_margin_left = 10.0
@@ -976,7 +992,7 @@ grow_vertical = 2
 [node name="Name" type="Label" parent="HBoxContainer/VBoxContainer/Skills/SkillName/Resilience/Panel/Stats"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Health"
+text = "Resilience"
 label_settings = SubResource("LabelSettings_76qm8")
 
 [node name="Change" type="Label" parent="HBoxContainer/VBoxContainer/Skills/SkillName/Resilience/Panel/Stats" groups=["SkillChangeLabels"]]
@@ -1748,8 +1764,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("2_j5jyr")
+texture_disabled = ExtResource("3_636e5")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1772,8 +1788,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("5_ddb7q")
+texture_disabled = ExtResource("6_jx57d")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1796,8 +1812,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("7_1jlli")
+texture_disabled = ExtResource("8_gu0d8")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1829,8 +1845,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("9_tymrr")
+texture_disabled = ExtResource("10_lm6rn")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1853,8 +1869,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("11_6v205")
+texture_disabled = ExtResource("12_l07a2")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1877,8 +1893,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("13_jro3e")
+texture_disabled = ExtResource("14_cfnei")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1910,8 +1926,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("15_21qfw")
+texture_disabled = ExtResource("16_ghduw")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1958,8 +1974,8 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 tooltip_text = "Bullet Time: Slows down time.
 (Requirements: Perception: 4, Long Guns: 20)"
-texture_normal = ExtResource("2_dt4ng")
-texture_disabled = ExtResource("3_ndo4i")
+texture_normal = ExtResource("19_ls15a")
+texture_disabled = ExtResource("20_enhww")
 ignore_texture_size = true
 stretch_mode = 5
 

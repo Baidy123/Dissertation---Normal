@@ -28,9 +28,7 @@ func _ready() -> void:
 	load_perks()
 	attribute_available_points = character.attribute_available_points
 	skill_available_points = character.skill_available_points
-
-
-		
+	
 	for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
@@ -51,9 +49,12 @@ func _ready() -> void:
 	for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
+		#print(button.get_parent().get_parent().name.to_lower())
+		button.pressed.connect(increase_skill.bind(button.get_parent().get_parent().name)) 
 	for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
+		button.pressed.connect(decrease_skill.bind(button.get_parent().get_parent().name)) 
 	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 	%PerkPoints.set_text("Points: " + str(character.perk_available_points))
 	if skill_available_points == 0:
@@ -92,6 +93,7 @@ func load_perks():
 	for button in get_tree().get_nodes_in_group("PerksButtons"):
 		var perk_id = button.get_name().to_lower()
 		var child_node = null
+		button.pressed.connect(spend_perk_points.bind(button.name.to_lower())) 
 		if button.has_node("TextureRect"):
 			child_node = button.get_node("TextureRect")
 

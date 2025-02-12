@@ -29,6 +29,7 @@ var current_weapon_world_model : Node3D
 	
 @onready var audio_stream_player = $AudioStreamPlayer3D
 
+
 func update_weapon_model():
 	if current_weapon_view_model != null and is_instance_valid(current_weapon_view_model):
 		current_weapon_view_model.queue_free()
@@ -111,9 +112,9 @@ var last_played_anim : String = ""
 var current_anim_finished_callback
 var current_anim_cancelled_callback
 
-func play_anim(name : String, finished_callback = null, cancelled_callback = null):
+func play_anim(name : String, finished_callback = null, cancelled_callback = null, play_speed = 0.0):
 	var anim_player : AnimationPlayer = current_weapon_view_model.get_node_or_null("AnimationPlayer")
-	
+	anim_player.speed_scale = 1 + play_speed * 1.5
 	if last_played_anim and get_anim() == last_played_anim and current_anim_cancelled_callback is Callable:
 		current_anim_cancelled_callback.call() # Last anim didn't finish yet
 	
