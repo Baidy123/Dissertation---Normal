@@ -22,57 +22,65 @@ var experience_required : int = get_required_experience(curr_level + 1)
 @export var perk_requirement = {
 	"1a": {
 		"name": "qinggong",
-		"attribute": {"constitution": 3},
-		"skill": {"resilience": 10},
+		"description": "Enables double jumping and significantly enhances aerial maneuverability.",
+		"attribute": {"constitution": 6},
+		"skill": {"endurance": 60},
 		"points": 1
 	},
 	"1b": {
 		"name": "bullet time",
-		"attribute": {"constitution": 3},
-		"skill": {"resilience": 20},
+		"description": "Slows down time.",
+		"attribute": {"perception": 6},
+		"skill": {"longguns": 60},
 		"points": 1
 	},
 	"1c": {
 		"name": "tough skin",
-		"attribute": {"constitution": 3},
-		"skill": {"resilience": 30},
+		"description": "Significantly reduces damage from enemy attacks.",
+		"attribute": {"constitution": 9},
+		"skill": {"resilience": 100},
 		"points": 1
 	},
 	"2a": {
 		"name": "deserter",
-		"attribute": {"constitution": 3},
-		"skill": {"resilience": 40},
+		"description": "Greatly increases the character's movement speed in seconds after being attacked .",
+		"attribute": {"constitution": 4},
+		"skill": {"endurance": 45},
 		"points": 1
 	},
 	"2b": {
 		"name": "cowboy",
-		"attribute": {"constitution": 3},
-		"skill": {"handguns": 100,
-					"longguns": 100},
+		"description": "Greatly improves weapon accuracy while moving, reduces recoil.",
+		"attribute": {"perception": 9},
+		"skill": {"handguns": 100},
 		"points": 1
 	},
 	"2c": {
 		"name": "pack rat",
-		"attribute": {"constitution": 5},
-		"skill": {"resilience": 240},
+		"description": "Doubles the character's ammunition reserves.",
+		"attribute": {"constitution": 4},
+		"skill": {"endurance": 45},
 		"points": 1
 	},
 	"3a": {
 		"name": "vampire",
-		"attribute": {"constitution": 7},
-		"skill": {"resilience": 20},
+		"description": "Restores a small amount of health after attacking an enemy in melee combat.",
+		"attribute": {"strength": 6},
+		"skill": {"melee": 60},
 		"points": 1
 	},
 	"3b": {
 		"name": "flak jacket",
-		"attribute": {"constitution": 9},
-		"skill": {"resilience": 20},
+		"description": "Prevents the character from taking damage from explosions.",
+		"attribute": {"constitution": 4},
+		"skill": {"resilience": 45},
 		"points": 1
 	},
 	"3c": {
 		"name": "die hard",
-		"attribute": {"strength": 10},
-		"skill": {"resilience": 20},
+		"description": " Grants 2 seconds of invincibility when taking a fatal hit, with a cooldown of 4 minutes.",
+		"attribute": {"strength": 9},
+		"skill": {"intimidation": 100},
 		"points": 1
 	}
 }
@@ -213,3 +221,12 @@ func die_hard():
 func die_hard_cold_down():
 	await get_tree().create_timer(die_hard_cd).timeout
 	die_hard_cd = 0
+	
+func update_influence_from_skills():
+	player.skills_influence["endurance"] = 1 + max(0, player.skills["endurance"] -15) * 0.005
+	player.skills_influence["resilience"] = max(0, player.skills["resilience"] -15) * 0.003
+	player.skills_influence["melee"] = 1 + max(0, player.skills["melee"] -15) * 0.05
+	player.skills_influence["intimidation"] = max(0, player.skills["intimidation"] -15) * 0.005
+	player.skills_influence["handguns"] = max(0, player.skills["handguns"] -15) * 0.0025
+	player.skills_influence["longguns"] = max(0, player.skills["longguns"] -15) * 0.0025
+	#print(character.skills_influence["handguns"])

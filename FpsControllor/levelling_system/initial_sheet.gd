@@ -27,7 +27,7 @@ var default_attributes = {
 	"strength": 3,
 	"perception": 3,
 }
-var default_attribute_points = 9
+var default_attribute_points = 6
 
 
 func _ready() -> void:
@@ -321,16 +321,10 @@ func _process(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
-func update_influence_from_skills():
-	character.skills_influence["endurance"] = 1 + max(0, character.skills["endurance"] -15) * 0.005
-	character.skills_influence["resilience"] = max(0, character.skills["resilience"] -15) * 0.002
-	character.skills_influence["melee"] = 1 + max(0, character.skills["melee"] -15) * 0.05
-	character.skills_influence["intimidation"] = max(0, character.skills["intimidation"] -15) * 0.005
-	character.skills_influence["handguns"] = max(0, character.skills["handguns"] -15) * 0.0025
-	character.skills_influence["longguns"] = max(0, character.skills["longguns"] -15) * 0.0025
+
 	
 func _exit_tree():
-	update_influence_from_skills()
+	levelling_sys.update_influence_from_skills()
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)

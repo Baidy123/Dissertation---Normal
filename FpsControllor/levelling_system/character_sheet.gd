@@ -24,6 +24,9 @@ func _ready() -> void:
 		character.get_node("PlayerHUD").set_visible(false)
 		character.get_node("PlayerHUD").set_process_unhandled_input(false) 
 		
+	$HBoxContainer/VBoxContainer/Attributes.set_visible(true)
+	$HBoxContainer/VBoxContainer/Skills.set_visible(false)
+	$HBoxContainer/VBoxContainer/Perks.set_visible(false)
 	load_stats()
 	load_perks()
 	attribute_available_points = character.attribute_available_points
@@ -93,6 +96,12 @@ func load_perks():
 	for button in get_tree().get_nodes_in_group("PerksButtons"):
 		var perk_id = button.get_name().to_lower()
 		var child_node = null
+		button.tooltip_text =  str(levelling_sys.perk_requirement[perk_id]["name"].to_upper()
+								+ ": " + levelling_sys.perk_requirement[perk_id]["description"]
+								+ "\n" + 
+								"requirement: "+ "\n" + str(levelling_sys.perk_requirement[perk_id]["attribute"])
+								+ "\n" + 
+								str(levelling_sys.perk_requirement[perk_id]["skill"]) )
 		button.pressed.connect(spend_perk_points.bind(button.name.to_lower())) 
 		if button.has_node("TextureRect"):
 			child_node = button.get_node("TextureRect")
@@ -283,19 +292,12 @@ func _process(delta):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
-func update_influence_from_skills():
-	character.skills_influence["endurance"] = 1 + max(0, character.skills["endurance"] -15) * 0.005
-	character.skills_influence["resilience"] = max(0, character.skills["resilience"] -15) * 0.002
-	character.skills_influence["melee"] = 1 + max(0, character.skills["melee"] -15) * 0.05
-	character.skills_influence["intimidation"] = max(0, character.skills["intimidation"] -15) * 0.005
-	character.skills_influence["handguns"] = max(0, character.skills["handguns"] -15) * 0.0025
-	character.skills_influence["longguns"] = max(0, character.skills["longguns"] -15) * 0.0025
-	#print(character.skills_influence["handguns"])
+
 	
 func _exit_tree(): 
 	#character.sprint_multi *= 1+character.skills["endurance"]*0.01
 	#print(character.sprint_multi)
-	update_influence_from_skills()
+	levelling_sys.update_influence_from_skills()
 	if character and character.has_node("PlayerHUD"):
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)

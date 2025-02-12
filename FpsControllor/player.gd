@@ -464,9 +464,11 @@ func gain_exp(amt: int):
 func on_level_up(skill_points_gain: int):
 	$PlayerHUD.get_node("Reminder").set_text("Level Up!!!")
 	$PlayerHUD.get_node("Reminder").set_visible(true)
+	health = max_health
 	skill_available_points += skill_points_gain
 	curr_level = $LevellingSystem.curr_level
 	if curr_level % 2 == 0:
+		skill_available_points += skill_points_gain
 		perk_available_points += 1
 	await get_tree().create_timer(3.0).timeout
 	$PlayerHUD.get_node("Reminder").set_visible(false)

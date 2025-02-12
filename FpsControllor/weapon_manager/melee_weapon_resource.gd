@@ -39,7 +39,8 @@ func fire_shot():
 			if randf() < chance_to_knock_back:
 				obj.apply_impulse(-nrml * 100.0 / obj.mass, pt - obj.global_position)
 		if weapon_manager.get_parent().perks["3a"] == true:
-			weapon_manager.get_parent().health += int(self.damage * 0.1 * dmg_increase)
+			if weapon_manager.get_parent().health < weapon_manager.get_parent().max_health:
+				weapon_manager.get_parent().health += int(self.damage * 0.1 * dmg_increase)
 	else:
 		weapon_manager.play_sound(miss_sound)
 	

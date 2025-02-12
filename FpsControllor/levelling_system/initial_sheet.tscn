@@ -110,7 +110,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Attributes" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 2
 
@@ -647,6 +646,29 @@ follow_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Tips" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Attributes/AttributeDescription/Panel/MarginContainer/DescriptionForAttri/Description"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeDescription/Panel/MarginContainer/DescriptionForAttri/Description/Tips"]
+custom_minimum_size = Vector2(200, 42)
+layout_mode = 2
+size_flags_vertical = 0
+text = "Tips"
+label_settings = SubResource("LabelSettings_owi7x")
+
+[node name="Content" type="Label" parent="HBoxContainer/VBoxContainer/Attributes/AttributeDescription/Panel/MarginContainer/DescriptionForAttri/Description/Tips"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "In the game, players need to choose different Perks, each of which has specific Attribute and Skill requirements. Here's an important tip:  
+- The highest Perk requirements for all attributes are 9, lowest for Constitution is 4, for the reset are 6 .  
+Therefore, whether you want a well-balanced character or one specialized in a particular field, you must carefully allocate your **Attributes**. Keep in mind that these values cannot be adjusted later in the game!
+
+"
+label_settings = SubResource("LabelSettings_owi7x")
+autowrap_mode = 3
 
 [node name="Constitution" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Attributes/AttributeDescription/Panel/MarginContainer/DescriptionForAttri/Description"]
 custom_minimum_size = Vector2(0, 180)
@@ -1729,6 +1751,7 @@ label_settings = SubResource("LabelSettings_owi7x")
 autowrap_mode = 3
 
 [node name="Aptitude" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 2
 
