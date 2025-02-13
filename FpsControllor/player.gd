@@ -375,15 +375,6 @@ func _handle_ladder_physics() -> bool:
 	return true
 
 func _handle_air_physics(delta):
-	#if abi_to_jt == true and jump_twice == false and Input.is_action_just_pressed("jump"):
-			#self.velocity.y = jump_velocity
-			#jump_twice = true
-	##Full control in air
-	#if full_control_in_air == true:
-		#self.velocity.x = wish_dir.x * 6.2
-		#self.velocity.z = wish_dir.z * 6.2
-		#self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
-		##print(self.velocity.length())
 	if perks["1a"] == true:
 		$LevellingSystem.qinggong(delta)
 	#BHOP in air
@@ -461,15 +452,19 @@ func gain_exp(amt: int):
 	$LevellingSystem.gain_experience(amt)
 	#return_req_exp()
 	
-func on_level_up(skill_points_gain: int):
-	$PlayerHUD.get_node("Reminder").set_text("Level Up!!!")
-	$PlayerHUD.get_node("Reminder").set_visible(true)
+func on_level_up(attribute_points_gain: int):
+
 	health = max_health
-	skill_available_points += skill_points_gain
 	curr_level = $LevellingSystem.curr_level
-	if curr_level % 2 == 0:
-		skill_available_points += skill_points_gain
+	attribute_available_points += attribute_points_gain
+	if curr_level % 2 != 0:
+		attribute_available_points += 1
 		perk_available_points += 1
+		$PlayerHUD.get_node("Reminder").set_text("Level Up!!!" + "\n" + "New Perk Available!!!")
+		$PlayerHUD.get_node("Reminder").set_visible(true)
+	else:
+		$PlayerHUD.get_node("Reminder").set_text("Level Up!!!")
+		$PlayerHUD.get_node("Reminder").set_visible(true)
 	await get_tree().create_timer(3.0).timeout
 	$PlayerHUD.get_node("Reminder").set_visible(false)
 	

@@ -4,7 +4,7 @@ extends Node3D
 
 @export var curr_level : int = 1
 @export var max_level : int = 12
-@export var skill_points_gained : int = 10
+@export var attribute_points_gained : int = 2
 
 var constitution : int = 0
 var strength : int = 0
@@ -15,7 +15,7 @@ var perception : int = 0
 var experience_required : int = get_required_experience(curr_level + 1)
 
 
-@export var slow_factor = 0.5
+@export var slow_factor = 0.4
 @export var dmg_reduce_rate = 0.5
 
 @export var speed_boost_multiplier: float = 2.0
@@ -23,64 +23,55 @@ var experience_required : int = get_required_experience(curr_level + 1)
 	"1a": {
 		"name": "qinggong",
 		"description": "Enables double jumping and significantly enhances aerial maneuverability.",
-		"attribute": {"constitution": 6},
-		"skill": {"endurance": 60},
+		"level": 7,
 		"points": 1
 	},
 	"1b": {
 		"name": "bullet time",
 		"description": "Slows down time.",
-		"attribute": {"perception": 6},
-		"skill": {"longguns": 60},
+		"level": 5,
 		"points": 1
 	},
 	"1c": {
 		"name": "tough skin",
 		"description": "Significantly reduces damage from enemy attacks.",
-		"attribute": {"constitution": 9},
-		"skill": {"resilience": 100},
+		"level": 11,
 		"points": 1
 	},
 	"2a": {
 		"name": "deserter",
 		"description": "Greatly increases the character's movement speed in seconds after being attacked .",
-		"attribute": {"constitution": 4},
-		"skill": {"endurance": 45},
+		"level": 3,
 		"points": 1
 	},
 	"2b": {
 		"name": "cowboy",
 		"description": "Greatly improves weapon accuracy while moving, reduces recoil.",
-		"attribute": {"perception": 9},
-		"skill": {"handguns": 100},
+		"level": 11,
 		"points": 1
 	},
 	"2c": {
 		"name": "pack rat",
 		"description": "Doubles the character's ammunition reserves.",
-		"attribute": {"constitution": 4},
-		"skill": {"endurance": 45},
+		"level": 3,
 		"points": 1
 	},
 	"3a": {
 		"name": "vampire",
 		"description": "Restores a small amount of health after attacking an enemy in melee combat.",
-		"attribute": {"strength": 6},
-		"skill": {"melee": 60},
+		"level": 7,
 		"points": 1
 	},
 	"3b": {
 		"name": "flak jacket",
 		"description": "Prevents the character from taking damage from explosions.",
-		"attribute": {"constitution": 4},
-		"skill": {"resilience": 45},
+		"level": 9,
 		"points": 1
 	},
 	"3c": {
 		"name": "die hard",
 		"description": " Grants 2 seconds of invincibility when taking a fatal hit, with a cooldown of 4 minutes.",
-		"attribute": {"strength": 9},
-		"skill": {"intimidation": 100},
+		"level": 11,
 		"points": 1
 	}
 }
@@ -121,7 +112,7 @@ func level_up():
 		experience_required = get_required_experience(curr_level + 1)
 		player.experience["req_exp"] = experience_required
 		if player and player.has_method("on_level_up"):
-			player.on_level_up(skill_points_gained)
+			player.on_level_up(attribute_points_gained)
 			print(curr_level)
 			
 			print(experience_required)
@@ -163,10 +154,10 @@ func bullet_time():
 		return  
 	if bullet_time_cd != 0:
 		return
-	bullet_time_cd = 5.0
+	bullet_time_cd = 10.0
 	is_bullet_time_active = true
 	Engine.time_scale = slow_factor  
-	await get_tree().create_timer(1 * slow_factor).timeout
+	await get_tree().create_timer(3 * slow_factor).timeout
 	Engine.time_scale = 1.0  
 	is_bullet_time_active = false
 	bullet_time_cold_down()
@@ -197,10 +188,7 @@ func deserter():
 func deserter_cold_down():
 	await get_tree().create_timer(deserter_cd).timeout
 	deserter_cd = 0
-	$"../PlayerHUD".get_node("DieHardReminder").set_text("Die Hard is ready...")
-	$"../PlayerHUD".get_node("DieHardReminder").set_visible(true)
-	await get_tree().create_timer(3.0).timeout
-	$"../PlayerHUD".get_node("DieHardReminder").set_visible(false)
+
 	
 #2b
 func cowboy(recoil: float):
@@ -221,6 +209,10 @@ func die_hard():
 func die_hard_cold_down():
 	await get_tree().create_timer(die_hard_cd).timeout
 	die_hard_cd = 0
+	$"../PlayerHUD".get_node("DieHardReminder").set_text("Die Hard is ready...")
+	$"../PlayerHUD".get_node("DieHardReminder").set_visible(true)
+	await get_tree().create_timer(3.0).timeout
+	$"../PlayerHUD".get_node("DieHardReminder").set_visible(false)
 	
 func update_influence_from_skills():
 	player.skills_influence["endurance"] = 1 + max(0, player.skills["endurance"] -15) * 0.005

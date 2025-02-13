@@ -196,28 +196,28 @@ func _on_attribute_confirm_pressed() -> void:
 		if attribute_available_points == 0:
 			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
 			
-func _on_skill_confirm_pressed() -> void:
-	if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
-		print("Nothing changed")
-	else :
-		character.skill_available_points = skill_available_points
-		character.skills["endurance"] += endurance_add
-		character.skills["resilience"] += resilience_add
-		character.skills["melee"] += melee_add
-		character.skills["intimidation"] +=intimidation_add
-		character.skills["handguns"] += handguns_add
-		character.skills["longguns"] += longguns_add
-		endurance_add = 0
-		resilience_add = 0
-		melee_add = 0
-		intimidation_add = 0
-		handguns_add = 0
-		longguns_add = 0
-		load_stats()
-		for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
-			button.set_visible(false)
-		for label in get_tree().get_nodes_in_group("SkillChangeLabels"):
-			label.set_text(" ")
+#func _on_skill_confirm_pressed() -> void:
+	#if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
+		#print("Nothing changed")
+	#else :
+		#character.skill_available_points = skill_available_points
+		#character.skills["endurance"] += endurance_add
+		#character.skills["resilience"] += resilience_add
+		#character.skills["melee"] += melee_add
+		#character.skills["intimidation"] +=intimidation_add
+		#character.skills["handguns"] += handguns_add
+		#character.skills["longguns"] += longguns_add
+		#endurance_add = 0
+		#resilience_add = 0
+		#melee_add = 0
+		#intimidation_add = 0
+		#handguns_add = 0
+		#longguns_add = 0
+		#load_stats()
+		#for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
+			#button.set_visible(false)
+		#for label in get_tree().get_nodes_in_group("SkillChangeLabels"):
+			#label.set_text(" ")
 
 func _on_aptitude_confirm_pressed() -> void:
 	if selected_aptitude_button == null:
@@ -329,7 +329,7 @@ func _exit_tree():
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
+	print(character.skills)
 
 
 
@@ -342,15 +342,15 @@ func _on_attribute_pressed() -> void:
 	
 
 
-func _on_skills_pressed() -> void:
-	if attribute_available_points != 0:
-		%Warning.text = "You must assign the attributes first..."
-		await get_tree().create_timer(1.5).timeout
-		%Warning.text = " "
-	else:
-		$HBoxContainer/VBoxContainer/Attributes.hide()
-		$HBoxContainer/VBoxContainer/Skills.show()
-		$HBoxContainer/VBoxContainer/Aptitude.hide()
+#func _on_skills_pressed() -> void:
+	#if attribute_available_points != 0:
+		#%Warning.text = "You must assign the attributes first..."
+		#await get_tree().create_timer(1.5).timeout
+		#%Warning.text = " "
+	#else:
+		#$HBoxContainer/VBoxContainer/Attributes.hide()
+		#$HBoxContainer/VBoxContainer/Skills.show()
+		#$HBoxContainer/VBoxContainer/Aptitude.hide()
 
 
 
@@ -359,10 +359,10 @@ func _on_aptitude_pressed() -> void:
 		%Warning.text = "You must assign the attributes first..."
 		await get_tree().create_timer(1.5).timeout
 		%Warning.text = " "
-	elif skill_available_points != 0:
-		%WarningForSkills.text = "You must assign the skills first..."
-		await get_tree().create_timer(1.5).timeout
-		%WarningForSkills.text = " "
+	#elif skill_available_points != 0:
+		#%WarningForSkills.text = "You must assign the skills first..."
+		#await get_tree().create_timer(1.5).timeout
+		#%WarningForSkills.text = " "
 	else:
 		$HBoxContainer/VBoxContainer/Attributes.hide()
 		$HBoxContainer/VBoxContainer/Skills.hide()

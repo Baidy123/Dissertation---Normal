@@ -35,13 +35,14 @@ func _ready() -> void:
 	for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
+		button.pressed.connect(increase_attribute.bind(button.get_parent().get_parent().name)) 
 	for button in get_tree().get_nodes_in_group("AttributeMinusButtons"):
 		button.set_disabled(true)
 		button.set_visible(false)
+		button.pressed.connect(decrease_attribute.bind(button.get_parent().get_parent().name)) 
 	%AttributeAvailablePoints.set_text("Points: " + str(attribute_available_points))
 	if attribute_available_points == 0:
-		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints.set_visible(false)
-		$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
+		pass
 	else:
 		for button in get_tree().get_nodes_in_group("AttributePlusButtons"):
 			button.set_disabled(false)
@@ -49,24 +50,24 @@ func _ready() -> void:
 	
 	#elif $HBoxContainer/VBoxContainer/Skills.visible == true:
 		
-	for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-		button.set_disabled(true)
-		button.set_visible(false)
-		#print(button.get_parent().get_parent().name.to_lower())
-		button.pressed.connect(increase_skill.bind(button.get_parent().get_parent().name)) 
-	for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
-		button.set_disabled(true)
-		button.set_visible(false)
-		button.pressed.connect(decrease_skill.bind(button.get_parent().get_parent().name)) 
+	#for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
+		#button.set_disabled(true)
+		#button.set_visible(false)
+		##print(button.get_parent().get_parent().name.to_lower())
+		#button.pressed.connect(increase_skill.bind(button.get_parent().get_parent().name)) 
+	#for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
+		#button.set_disabled(true)
+		#button.set_visible(false)
+		#button.pressed.connect(decrease_skill.bind(button.get_parent().get_parent().name)) 
 	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
 	%PerkPoints.set_text("Points: " + str(character.perk_available_points))
-	if skill_available_points == 0:
-		pass
-		#$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints.set_visible(false)
-	else:
-		for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-			button.set_disabled(false)
-			button.set_visible(true)
+	#if skill_available_points == 0:
+		#pass
+		##$HBoxContainer/VBoxContainer/Attribute/AttributeName/AttributePoints.set_visible(false)
+	#else:
+		#for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
+			#button.set_disabled(false)
+			#button.set_visible(true)
 
 
 func load_stats():
@@ -97,11 +98,7 @@ func load_perks():
 		var perk_id = button.get_name().to_lower()
 		var child_node = null
 		button.tooltip_text =  str(levelling_sys.perk_requirement[perk_id]["name"].to_upper()
-								+ ": " + levelling_sys.perk_requirement[perk_id]["description"]
-								+ "\n" + 
-								"requirement: "+ "\n" + str(levelling_sys.perk_requirement[perk_id]["attribute"])
-								+ "\n" + 
-								str(levelling_sys.perk_requirement[perk_id]["skill"]) )
+								+ ": " + levelling_sys.perk_requirement[perk_id]["description"] )
 		button.pressed.connect(spend_perk_points.bind(button.name.to_lower())) 
 		if button.has_node("TextureRect"):
 			child_node = button.get_node("TextureRect")
@@ -134,18 +131,11 @@ func check_perk_requirements(perk_id: String) -> bool:
 
 	var req_dict =  levelling_sys.perk_requirement[perk_id]
 
-	if req_dict.has("attribute"):
-		for attr_name in req_dict["attribute"]:
-			var required_val = req_dict["attribute"][attr_name]
-			var current_val = character.attributes[attr_name] if character.attributes.has(attr_name) else 0
-			if current_val < required_val:
-				return false
-	if req_dict.has("skill"):
-		for skill_name in req_dict["skill"]:
-			var required_val = req_dict["skill"][skill_name]
-			var current_val = character.skills[skill_name] if character.skills.has(skill_name) else 0
-			if current_val < required_val:
-				return false
+	if req_dict.has("level"):
+		var required_lvl = req_dict["level"]
+		var current_lvl = character.curr_level
+		if current_lvl < required_lvl:
+			return false
 				
 	if req_dict.has("points"):
 		var required_val =  req_dict["points"]
@@ -184,35 +174,35 @@ func decrease_attribute(stat: String):
 		button.set_visible(true)
 	print((stat + "Minus"))
 	
-func increase_skill(stat: String):
-	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") +1)
-	%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
-												get(stat.to_lower() + "_add")) + " ")
-	%SkillName.get_node(stat + "/Panel/Min").set_disabled(false)
-	%SkillName.get_node(stat + "/Panel/Min").set_visible(true)
-	skill_available_points -= 1
-	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
-	if skill_available_points == 0:
-		for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-			button.set_disabled(true)
-			button.set_visible(false)
-	print(stat + "Plus")
-	
-func decrease_skill(stat: String):
-	set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") -1)
-	if get(stat.to_lower() + "_add") == 0:
-		%SkillName.get_node(stat + "/Panel/Min").set_disabled(true)
-		%SkillName.get_node(stat + "/Panel/Min").set_visible(false)
-		%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("")
-	else :
-		%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
-												get(stat.to_lower() + "_add")) + " ")
-	skill_available_points += 1
-	%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
-	for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
-		button.set_disabled(false)
-		button.set_visible(true)
-	print((stat + "Minus"))
+#func increase_skill(stat: String):
+	#set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") +1)
+	#%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
+												#get(stat.to_lower() + "_add")) + " ")
+	#%SkillName.get_node(stat + "/Panel/Min").set_disabled(false)
+	#%SkillName.get_node(stat + "/Panel/Min").set_visible(true)
+	#skill_available_points -= 1
+	#%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
+	#if skill_available_points == 0:
+		#for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
+			#button.set_disabled(true)
+			#button.set_visible(false)
+	#print(stat + "Plus")
+	#
+#func decrease_skill(stat: String):
+	#set(stat.to_lower() + "_add", get(stat.to_lower() + "_add") -1)
+	#if get(stat.to_lower() + "_add") == 0:
+		#%SkillName.get_node(stat + "/Panel/Min").set_disabled(true)
+		#%SkillName.get_node(stat + "/Panel/Min").set_visible(false)
+		#%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("")
+	#else :
+		#%SkillName.get_node(stat + "/Panel/Stats/Change").set_text("+" + str(
+												#get(stat.to_lower() + "_add")) + " ")
+	#skill_available_points += 1
+	#%SkillAvailablePoints.set_text("Points: " + str(skill_available_points))
+	#for button in get_tree().get_nodes_in_group("SkillPlusButtons"):
+		#button.set_disabled(false)
+		#button.set_visible(true)
+	#print((stat + "Minus"))
 	
 func spend_perk_points(perk_id: String):
 	if not character:
@@ -251,6 +241,7 @@ func _on_attribute_confirm_pressed() -> void:
 		character.skills["handguns"] += perception_add * 5
 		character.skills["longguns"] += perception_add * 5
 		
+		
 		strength_add = 0
 		constitution_add = 0
 		perception_add = 0
@@ -262,28 +253,28 @@ func _on_attribute_confirm_pressed() -> void:
 		if attribute_available_points == 0:
 			$HBoxContainer/VBoxContainer/Attributes/AttributeName/AttributePoints/AttributeConfirm.set_visible(false)
 
-func _on_skill_confirm_pressed() -> void:
-	if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
-		print("Nothing changed")
-	else :
-		character.skill_available_points = skill_available_points
-		character.skills["endurance"] += endurance_add
-		character.skills["resilience"] += resilience_add
-		character.skills["melee"] += melee_add
-		character.skills["intimidation"] +=intimidation_add
-		character.skills["handguns"] += handguns_add
-		character.skills["longguns"] += longguns_add
-		endurance_add = 0
-		resilience_add = 0
-		melee_add = 0
-		intimidation_add = 0
-		handguns_add = 0
-		longguns_add = 0
-		load_stats()
-		for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
-			button.set_visible(false)
-		for label in get_tree().get_nodes_in_group("SkillChangeLabels"):
-			label.set_text(" ")
+#func _on_skill_confirm_pressed() -> void:
+	#if endurance_add + resilience_add + melee_add + intimidation_add + handguns_add + longguns_add == 0:
+		#print("Nothing changed")
+	#else :
+		#character.skill_available_points = skill_available_points
+		#character.skills["endurance"] += endurance_add
+		#character.skills["resilience"] += resilience_add
+		#character.skills["melee"] += melee_add
+		#character.skills["intimidation"] +=intimidation_add
+		#character.skills["handguns"] += handguns_add
+		#character.skills["longguns"] += longguns_add
+		#endurance_add = 0
+		#resilience_add = 0
+		#melee_add = 0
+		#intimidation_add = 0
+		#handguns_add = 0
+		#longguns_add = 0
+		#load_stats()
+		#for button in get_tree().get_nodes_in_group("SkillMinusButtons"):
+			#button.set_visible(false)
+		#for label in get_tree().get_nodes_in_group("SkillChangeLabels"):
+			#label.set_text(" ")
 
 
 
@@ -302,7 +293,7 @@ func _exit_tree():
 		character.get_node("PlayerHUD").visible = true  
 		character.get_node("PlayerHUD").set_process_unhandled_input(true)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+	print(character.skills)
 
 
 
@@ -314,11 +305,11 @@ func _on_attribute_pressed() -> void:
 	
 	
 
-
-func _on_skills_pressed() -> void:
-	$HBoxContainer/VBoxContainer/Attributes.hide()
-	$HBoxContainer/VBoxContainer/Skills.show()
-	$HBoxContainer/VBoxContainer/Perks.hide()
+#
+#func _on_skills_pressed() -> void:
+	#$HBoxContainer/VBoxContainer/Attributes.hide()
+	#$HBoxContainer/VBoxContainer/Skills.show()
+	#$HBoxContainer/VBoxContainer/Perks.hide()
 
 
 
