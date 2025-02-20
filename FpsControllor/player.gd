@@ -1,10 +1,9 @@
 class_name Player
 extends CharacterBody3D
 
-signal player_hit()
-
 @export var sensitivity : float = 0.006
-@export var jump_velocity:= 6.0
+@export var jump_velocity:= 5.0
+
 var wish_dir = Vector3.ZERO
 var camera_aligned_wish_dir = Vector3.ZERO
 
@@ -15,7 +14,7 @@ var headbob_time = 0.0
 #Character stats
 @export var health := 100.0
 @export var max_health := 100.0
-@export var currency := 2000
+@export var currency := 1000
 
 @export var aptitude : String = " "
 @export var attribute_available_points :int = 6
@@ -77,7 +76,7 @@ var skills_attribute = {
 	"deagle" :  {
 				"name" : "deagle",
 				"owned" : false,
-				"price" : 1,
+				"price" : 700,
 				"type": "weapon",
 				"description" : "This is the Description for deagle",
 				"file_path": "res://FpsControllor/weapon_manager/deagle/deagle.tres"
@@ -85,23 +84,23 @@ var skills_attribute = {
 	"p90" : 	    {
 				"name" : "p90",
 				"owned" : false,
-				"price" : 1,
+				"price" : 2350,
 				"type": "weapon",
 				"description" : "This is the Description for p90",
 				"file_path": "res://FpsControllor/weapon_manager/p90/p90.tres"
 				},
-	"knife" :   {
-				"name" : "knife",
-				"owned" : true,
-				"price" : 1,
-				"type": "weapon",
-				"description" : "This is the Description for knife",
-				"file_path": "res://FpsControllor/weapon_manager/knife/knife.tres"
-				},
+	#"knife" :   {
+				#"name" : "knife",
+				#"owned" : true,
+				#"price" : 1,
+				#"type": "weapon",
+				#"description" : "This is the Description for knife",
+				#"file_path": "res://FpsControllor/weapon_manager/knife/knife.tres"
+				#},
 	"rpg" :     {
 				"name" : "rpg",
 				"owned" : false,
-				"price" : 1,
+				"price" : 10000,
 				"type": "weapon",
 				"description" : "This is the Description for rpg",
 				"file_path": "res://FpsControllor/weapon_manager/rpg/rpg.tres"
@@ -114,16 +113,55 @@ var skills_attribute = {
 				"description" : "This is the Description for nade",
 				"file_path": "res://FpsControllor/weapon_manager/grenade/grenade.tres"
 				},
+	"m4" :		{
+				"name" : "m4",
+				"owned" : false,
+				"price" : 2900,
+				"type": "weapon",
+				"description" : "This is the Description for m4",
+				"file_path": "res://FpsControllor/weapon_manager/m4/m4.tres"
+				},
+	"ak47" :	{
+				"name" : "ak47",
+				"owned" : false,
+				"price" : 2700,
+				"type": "weapon",
+				"description" : "This is the Description for ak47",
+				"file_path": "res://FpsControllor/weapon_manager/ak47/ak47.tres"
+				},
+	"aa12" :	{
+				"name" : "aa12",
+				"owned" : false,
+				"price" : 5000,
+				"type": "weapon",
+				"description" : "This is the Description for aa12",
+				"file_path": "res://FpsControllor/weapon_manager/aa12/aa12.tres"
+				},
+	"axe" :		{
+				"name" : "axe",
+				"owned" : false,
+				"price" : 1000,
+				"type": "weapon",
+				"description" : "This is the Description for axe",
+				"file_path": "res://FpsControllor/weapon_manager/axe/axe.tres"
+				},
+	"sawed_off" :		{
+				"name" : "sawed_off",
+				"owned" : false,
+				"price" : 1050,
+				"type": "weapon",
+				"description" : "This is the Description for sawed_off",
+				"file_path": "res://FpsControllor/weapon_manager/sawed_off/sawed_off.tres"
+				},
 	"medkit": 	{
 				"name": "Medkit",
-				"price": 50,
-				"description": "Heals 50 HP",
+				"price": 500,
+				"description": "Heals 35 HP",
 				"type": "medkit",          # 标记这是医疗箱
-				"max_quantity": 3,
-				"owned_quantity": 1
+				"max_quantity": 5,
+				"owned_quantity": 0
 				}
 }
-
 #Ground movement settings
 @export var walk_speed:= 6.0
 @export var sprint_multi:= 1.5
@@ -150,10 +188,15 @@ const WORLD_MODEL_LAYER = 2
 const CROUCH_TRANSLATE = 0.7
 
 var is_crouched := false
-
-
+signal player_hit()
+var gui
 
 func _ready() -> void:
+	if OS.has_feature("debug"):
+		currency = 1000000
+	if has_node("../../GUI"):
+		gui = get_node("../../GUI")
+	update_viwe_and_world_model_masks()
 	update_viwe_and_world_model_masks()
 		
 
@@ -169,7 +212,10 @@ func update_viwe_and_world_model_masks():
 	%Camera3D.set_cull_mask_value(WORLD_MODEL_LAYER,false)
 	
 var dmg_reduce_rate : float = 0
+var is_died = false
 func take_damage(damage: float, dmg_type: String = " "):
+	if is_died == true:
+		return
 	if $LevellingSystem.die_hard_active:
 		return
 	if perks["3b"] == true:
@@ -177,9 +223,10 @@ func take_damage(damage: float, dmg_type: String = " "):
 			return
 	emit_signal("player_hit")
 	var final_damage = damage * (max(0.5, 1 - skills_influence["resilience"]))
+	print(skills_influence["resilience"])
 	if perks["1c"] == true:
 		final_damage = $LevellingSystem.tough_skin(final_damage)
-	health -= int(final_damage)
+	health -= round(final_damage)
 	if perks["2a"] == true:
 		$LevellingSystem.deserter()
 	if health <= 0:
@@ -188,7 +235,8 @@ func take_damage(damage: float, dmg_type: String = " "):
 			health = 1
 		else:
 			health = 0
-			get_tree().change_scene_to_file("res://StarterScene.tscn")
+			is_died = true
+			gui._on_player_died()
 			
 func use_medic():
 	var medicine = weapons["medkit"]["owned_quantity"]
@@ -198,7 +246,10 @@ func use_medic():
 	if health >= max_health:
 		health = max_health
 	weapons["medkit"]["owned_quantity"] -= 1
-
+func return_fullfill_costs():
+	var current_weapon = $WeaponManager.current_weapon
+	return current_weapon.fullfill_money
+	
 func fullfill_ammo():
 	var current_weapon = $WeaponManager.current_weapon
 	if (current_weapon.current_ammo and
@@ -214,7 +265,7 @@ func fullfill_ammo():
 	else:
 		current_weapon.fullfill_ammo()
 		currency -= 1000
-	
+		
 var is_sprinting :bool = false 
 var sprint_limit: float = 5.0 * skills_influence["endurance"]
 var sprint_remaining_time := sprint_limit
@@ -257,7 +308,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			%Camera3D.rotation.x = clamp(%Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad((90)))
 	if event.is_action_pressed("bullettime") and perks["1b"]:
 		$LevellingSystem.bullet_time()
-		#fullfill_ammo()
 	if Input.is_action_just_pressed("healing"):
 		use_medic()
 
@@ -455,6 +505,15 @@ func _handle_ladder_physics() -> bool:
 	return true
 
 func _handle_air_physics(delta):
+	#if abi_to_jt == true and jump_twice == false and Input.is_action_just_pressed("jump"):
+			#self.velocity.y = jump_velocity
+			#jump_twice = true
+	##Full control in air
+	#if full_control_in_air == true:
+		#self.velocity.x = wish_dir.x * 6.2
+		#self.velocity.z = wish_dir.z * 6.2
+		#self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+		##print(self.velocity.length())
 	if perks["1a"] == true:
 		$LevellingSystem.qinggong(delta)
 	#BHOP in air
@@ -532,22 +591,22 @@ func gain_exp(amt: int):
 	$LevellingSystem.gain_experience(amt)
 	#return_req_exp()
 	
-func on_level_up(attribute_points_gain: int):
+func on_level_up(skill_points_gain: int):
 
 	health = max_health
+	skill_available_points += skill_points_gain
 	curr_level = $LevellingSystem.curr_level
-	attribute_available_points += attribute_points_gain
-	if curr_level % 2 != 0:
-		attribute_available_points += 1
+	if (curr_level %2 == 1 and curr_level != 1):
+		#skill_available_points += skill_points_gain
+		
 		perk_available_points += 1
-		$PlayerHUD.get_node("Reminder").set_text("Level Up!!!" + "\n" + "New Perk Available!!!")
+		$PlayerHUD.get_node("Reminder").set_text("Level Up!!!" + "\n" + "New Perk Point Gained!!!")
 		$PlayerHUD.get_node("Reminder").set_visible(true)
 	else:
 		$PlayerHUD.get_node("Reminder").set_text("Level Up!!!")
 		$PlayerHUD.get_node("Reminder").set_visible(true)
 	await get_tree().create_timer(3.0).timeout
 	$PlayerHUD.get_node("Reminder").set_visible(false)
-	
 @onready var animation_tree : AnimationTree = $"WorldModel/desert droid container/AnimationTree"
 @onready var state_machine_playback : AnimationNodeStateMachinePlayback = $"WorldModel/desert droid container/AnimationTree".get("parameters/playback")
 
